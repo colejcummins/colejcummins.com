@@ -3,26 +3,26 @@
 import {usePathname} from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import {useState, KeyboardEvent, Fragment} from 'react';
+import {useState, KeyboardEvent, Fragment, useRef} from 'react';
 
 const lsContent = [
   {
     name: 'pyssect',
     description: 'Python control flow graph and AST visualizer',
     tech: 'Python / React / NextJS',
-    link: '',
+    link: 'https://github.com/colejcummins/pyssect',
   },
   {
     name: 'minilang-compiler',
     description: 'A minilang toy compiler writen in Java',
     tech: 'Java / Clang',
-    link: '',
+    link: 'https://github.com/colejcummins/minilang-compiler',
   },
   {
     name: 'asciizer',
     description: 'Turns images into ascii art',
     tech: 'Typescript',
-    link: '',
+    link: 'https://github.com/colejcummins/image-to-ascii',
   },
   {
     name: 'react-search-modal',
@@ -31,6 +31,8 @@ const lsContent = [
     link: '',
   },
 ];
+
+const validCommands = ['help', 'whoami', 'ls', 'clear'];
 
 type Command = {
   name: string;
@@ -42,6 +44,7 @@ export function Console() {
   const [commandHistory, setCommandHistory] = useState<Command[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(true);
+  const ref = useRef<HTMLElement>(null);
 
   const renderLsContent = () => {
     return (
@@ -94,7 +97,22 @@ export function Console() {
     )
   }
 
+  const renderHelp = (command: string) => {
+    return (
+      <div className="flex flex-col font-mono">
+        {command !== 'help' && (
+          <div className="text-red-500">{`${command} is not a valid command`}</div>
+        )}
+        <div className="text-slate-400">
+          {`Valid commands: ${validCommands.join(', ')}`}
+        </div>
+      </div>
+
+    )
+  }
+
   const renderCommand = (command: Command, i: number) => {
+    const showHelp = !validCommands.includes(command.name) || command.name === 'help';
     return (
       <Fragment>
         <div key={i} className="flex gap-2 font-mono font-semibold text-blue-500">
@@ -103,6 +121,7 @@ export function Console() {
         </div>
         {command.name === 'ls' && renderLsContent()}
         {command.name === 'whoami' && renderWhoAmIContent()}
+        {showHelp && renderHelp(command.name)}
       </Fragment>
     );
   }
@@ -132,10 +151,12 @@ export function Console() {
 
   return (
     <div className="flex flex-col h-[600px] px-2 py-2">
-      {renderCommandHistory()}
-      <div className="flex gap-2 font-mono font-semibold text-blue-500">
-        {pathname === '/' ? 'colejcummins' : pathname} &gt;
-        <input className="text-slate-50 flex-1 font-normal border-none outline-none bg-transparent" value={inputValue} onChange={(evt) => setInputValue(evt.target.value)} onFocus={() => setInputFocused(true)} onBlur={() => setInputFocused(false)} onKeyDown={handleKeyPress}/>
+      <div className="justify-self-end overflow-hidden">
+        {renderCommandHistory()}
+        <div className="flex gap-2 font-mono font-semibold text-blue-500 [overflow-anchor: auto]" ref={ref}>
+          {pathname === '/' ? 'colejcummins' : pathname} &gt;
+          <input className="text-slate-50 flex-1 font-normal border-none outline-none bg-transparent" value={inputValue} onChange={(evt) => setInputValue(evt.target.value)} onFocus={() => setInputFocused(true)} onBlur={() => setInputFocused(false)} onKeyDown={handleKeyPress}/>
+        </div>
       </div>
     </div>
   )
