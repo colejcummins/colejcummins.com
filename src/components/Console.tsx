@@ -1,9 +1,13 @@
 'use client'
 
-import {usePathname} from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import {useState, KeyboardEvent, Fragment, useRef} from 'react';
+import {Fragment} from 'react';
+import { useShallow } from 'zustand/react/shallow';
+
+import {useStore} from '@/store/store';
+import {ConsoleInput} from '@/components/ConsoleInput';
+import {Command, validCommands} from '@/lib/command';
 
 const lsContent = [
   {
@@ -32,19 +36,22 @@ const lsContent = [
   },
 ];
 
-const validCommands = ['help', 'whoami', 'ls', 'clear'];
-
-type Command = {
-  name: string;
-  location: string;
-}
+/**
+ * TODO
+ * Fix scrolling behavior for text box
+ * Make link hoverability more obvious
+ * Add cd command
+ *
+ * TODO Future
+ * Make custom cursor for web page
+ * Add moving gradient background
+ * light mode
+ */
 
 export function Console() {
-  const pathname = usePathname();
-  const [commandHistory, setCommandHistory] = useState<Command[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [inputFocused, setInputFocused] = useState(true);
-  const ref = useRef<HTMLElement>(null);
+  const [consoleHistory, clearHistory] = useStore(
+    useShallow((state) => [state.consoleHistory, state.clearHistory])
+  );
 
   const renderLsContent = () => {
     return (
@@ -126,10 +133,10 @@ export function Console() {
     );
   }
 
-  const renderCommandHistory = () => {
+  const renderConsoleHistory = () => {
     return (
       <div className="flex flex-col">
-        {commandHistory.map((command, i) => renderCommand(command, i))}
+        {consoleHistory.map((command, i) => renderCommand(command, i))}
       </div>
     );
   }
@@ -137,26 +144,15 @@ export function Console() {
   const doCommand = (str: string) => {
     switch (str) {
       case 'clear':
-        setCommandHistory([]);
-    }
-  }
-
-  const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
-    if (evt.key === 'Enter' && inputFocused && inputValue !== '') {
-      setCommandHistory((prev) => prev.concat({name: inputValue, location: pathname}));
-      doCommand(inputValue);
-      setInputValue('');
+        clearHistory();
     }
   }
 
   return (
     <div className="flex flex-col h-[600px] px-2 py-2">
       <div className="justify-self-end overflow-hidden">
-        {renderCommandHistory()}
-        <div className="flex gap-2 font-mono font-semibold text-blue-500 [overflow-anchor: auto]" ref={ref}>
-          {pathname === '/' ? 'colejcummins' : pathname} &gt;
-          <input className="text-slate-50 flex-1 font-normal border-none outline-none bg-transparent" value={inputValue} onChange={(evt) => setInputValue(evt.target.value)} onFocus={() => setInputFocused(true)} onBlur={() => setInputFocused(false)} onKeyDown={handleKeyPress}/>
-        </div>
+        {renderConsoleHistory()}
+        <ConsoleInput />
       </div>
     </div>
   )
