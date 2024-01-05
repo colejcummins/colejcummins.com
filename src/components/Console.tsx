@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link';
 import Image from 'next/image';
 import {Fragment} from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -8,6 +7,7 @@ import { useShallow } from 'zustand/react/shallow';
 import {useStore} from '@/store/store';
 import {ConsoleInput} from '@/components/ConsoleInput';
 import {Command, validCommands} from '@/lib/command';
+import Link from '@/components/Link';
 
 const lsContent = [
   {
@@ -121,8 +121,8 @@ export function Console() {
   const renderCommand = (command: Command, i: number) => {
     const showHelp = !validCommands.includes(command.name) || command.name === 'help';
     return (
-      <Fragment>
-        <div key={i} className="flex gap-2 font-mono font-semibold text-blue-500">
+      <Fragment key={i}>
+        <div className="flex gap-2 font-mono font-semibold text-blue-500">
           {command.location === '/' ? 'colejcummins' : command.location} &gt;
           <div className="text-slate-50 font-normal">{command.name}</div>
         </div>
