@@ -1,7 +1,8 @@
 'use client'
 
 import Image from 'next/image';
-import {Fragment} from 'react';
+import {Fragment, useState} from 'react';
+import clsx from 'clsx';
 import { useShallow } from 'zustand/react/shallow';
 
 import {useStore} from '@/store/store';
@@ -39,7 +40,6 @@ const lsContent = [
 /**
  * TODO
  * Fix scrolling behavior for text box
- * Make link hoverability more obvious
  * Add cd command
  *
  * TODO Future
@@ -48,34 +48,38 @@ const lsContent = [
  * light mode
  */
 
-export function Console() {
-  const [consoleHistory, clearHistory] = useStore(
-    useShallow((state) => [state.consoleHistory, state.clearHistory])
-  );
+const LsContent = () => {
+  const [hovering, setHovering] = useState('');
 
-  const renderLsContent = () => {
-    return (
-      <div className="grid grid-cols-2 gap-y-6 gap-x-6 w-full py-4">
-        {lsContent.map((val) => (
-          <Link key={val.name} href={val.link} target="_blank">
-            <div className="flex flex-col font-mono font-normal">
-              <div className="flex justify-between">
-                <div className="text-slate-50">
-                  {val.name}
-                </div>
-                <div className="text-slate-600">
-                  {val.tech}
-                </div>
+  const hoveringColor = (name: string, color: string) => hovering === name ? 'text-blue-400' : color;
+
+  return (
+    <div className="grid grid-cols-2 gap-y-6 gap-x-6 w-full py-4">
+      {lsContent.map((val) => (
+        <Link key={val.name} href={val.link} target="_blank" onMouseEnter={() => setHovering(val.name)} onMouseLeave={() => setHovering('')}>
+          <div className="flex flex-col font-mono font-normal">
+            <div className="flex justify-between">
+              <div className={hoveringColor(val.name, "text-slate-50")}>
+                {val.name}
               </div>
-              <div className="text-slate-400">
-                {val.description}
+              <div className={hoveringColor(val.name, "text-slate-600")}>
+                {val.tech}
               </div>
             </div>
-          </Link>
-        ))}
-      </div>
-    )
-  }
+            <div className={hoveringColor(val.name, "text-slate-400")}>
+              {val.description}
+            </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
+export function Console() {
+  const [consoleHistory] = useStore(
+    useShallow((state) => [state.consoleHistory])
+  );
 
   const renderWhoAmIContent = () => {
     return (
@@ -126,7 +130,7 @@ export function Console() {
           {command.location === '/' ? 'colejcummins' : command.location} &gt;
           <div className="text-slate-50 font-normal">{command.name}</div>
         </div>
-        {command.name === 'ls' && renderLsContent()}
+        {command.name === 'ls' && <LsContent />}
         {command.name === 'whoami' && renderWhoAmIContent()}
         {showHelp && renderHelp(command.name)}
       </Fragment>
@@ -141,12 +145,7 @@ export function Console() {
     );
   }
 
-  const doCommand = (str: string) => {
-    switch (str) {
-      case 'clear':
-        clearHistory();
-    }
-  }
+
 
   return (
     <div className="flex flex-col h-[600px] px-2 py-2">
