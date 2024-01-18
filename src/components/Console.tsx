@@ -7,10 +7,10 @@ import { useShallow } from 'zustand/react/shallow';
 
 import {useStore} from '@/store/store';
 import {ConsoleInput} from '@/components/ConsoleInput';
-import {Command, validCommands} from '@/lib/command';
+import {Command, validateCommand} from '@/lib/command';
 import Link from '@/components/Link';
 
-const lsContent = [
+export const rootContent = [
   {
     name: 'pyssect',
     description: 'Python control flow graph and AST visualizer',
@@ -55,7 +55,7 @@ const LsContent = () => {
 
   return (
     <div className="grid grid-cols-2 gap-y-6 gap-x-6 w-full py-4">
-      {lsContent.map((val) => (
+      {rootContent.map((val) => (
         <Link key={val.name} href={val.link} target="_blank" onMouseEnter={() => setHovering(val.name)} onMouseLeave={() => setHovering('')}>
           <div className="flex flex-col font-mono font-normal">
             <div className="flex justify-between">
@@ -108,22 +108,21 @@ export function Console() {
     )
   }
 
-  const renderHelp = (command: string) => {
+  const renderValidation = (validation: {error?: string, message?: string}) => {
     return (
       <div className="flex flex-col font-mono">
-        {command !== 'help' && (
-          <div className="text-red-500">{`${command} is not a valid command`}</div>
+        {validation.error && (
+          <div className="text-red-500">{validation.error}</div>
         )}
-        <div className="text-slate-400">
-          {`Valid commands: ${validCommands.join(', ')}`}
-        </div>
+        {validation.message && (
+          <div className="text-slate-400">{validation.message}</div>
+        )}
       </div>
-
     )
   }
 
   const renderCommand = (command: Command, i: number) => {
-    const showHelp = !validCommands.includes(command.name) || command.name === 'help';
+    const validation = validateCommand(command.name);
     return (
       <Fragment key={i}>
         <div className="flex gap-2 font-mono font-semibold text-blue-500">
@@ -132,7 +131,8 @@ export function Console() {
         </div>
         {command.name === 'ls' && <LsContent />}
         {command.name === 'whoami' && renderWhoAmIContent()}
-        {showHelp && renderHelp(command.name)}
+        {command.name === 'help' && renderValidation({message: ``})}
+        {validation && renderValidation(validation)}
       </Fragment>
     );
   }

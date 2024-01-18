@@ -23,7 +23,6 @@ export function ConsoleInput() {
   }
 
   useEffect(() => {
-    console.log(inputValue, historyIndex)
     inputRef.current?.setSelectionRange(inputValue.length, inputValue.length);
   }, [historyIndex]);
 
@@ -41,7 +40,6 @@ export function ConsoleInput() {
     }
     else if (evt.key === 'ArrowDown' && consoleHistory && historyIndex > 0) {
       changeIndex(-1);
-      console.log(historyIndex);
       const newValue = historyIndex > 1 ? consoleHistory[consoleHistory.length - historyIndex + 1].name : '';
       setInputValue(newValue);
     }
