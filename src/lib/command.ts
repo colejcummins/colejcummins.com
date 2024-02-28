@@ -16,13 +16,40 @@ export const commandMan = {
   'clear': 'Clears console and command history',
 };
 
+export const autocomplete = (input: string): string => {
+  const [command, ...args] = input.split(' ').filter((val) => val !== '');
+
+  switch (command) {
+    case 'cd':
+      const cd = validDirs.find((validDir) => args[0] !== '' && validDir.startsWith(args[0]));
+      if (cd) {
+        return input + cd.substring(args[0].length);
+      }
+      break;
+    case 'man': {
+      const man = Object.keys(commandMan).find((man) => args[0] !== '' && man.startsWith(args[0]));
+      if (man) {
+        return input + man.substring(args[0].length);
+      }
+      break;
+    }
+    default:
+      const startsWith = validCommands.find((validC) => command !== '' && validC.startsWith(command));
+      if (startsWith) {
+        return input + startsWith.substring(input.length);
+      }
+  }
+
+  return '';
+}
+
 export const validateCommand = (input: string): {error?: string, message?: string} | undefined => {
   const [command, ...args] = input.split(' ').filter((val) => val !== '');
   if (!validCommands.includes(command)) {
     return {error: `${command} is not a valid command`, message: `Valid commands: ${validCommands.join(', ')}`};
   }
   if (command === 'man') {
-    if (!args || args.length > 1) {
+    if (!args || args.length < 1) {
       return {error: `man expects 1 argument`, message: `Valid arguments: ${validCommands.join(', ')}`}
     }
     if (!validCommands.includes(args[0])) {

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import {Fragment, useState} from 'react';
+import {Fragment, useRef} from 'react';
 import clsx from 'clsx';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -49,24 +49,21 @@ export const rootContent = [
  */
 
 const LsContent = () => {
-  const [hovering, setHovering] = useState('');
-
-  const hoveringColor = (name: string, color: string) => hovering === name ? 'text-blue-400' : color;
 
   return (
     <div className="grid grid-cols-2 gap-y-6 gap-x-6 w-full py-4">
       {rootContent.map((val) => (
-        <Link key={val.name} href={val.link} target="_blank" onMouseEnter={() => setHovering(val.name)} onMouseLeave={() => setHovering('')}>
+        <Link key={val.name} href={val.link} target="_blank">
           <div className="flex flex-col font-mono font-normal">
             <div className="flex justify-between">
-              <div className={hoveringColor(val.name, "text-slate-50")}>
+              <div className="text-slate-50">
                 {val.name}
               </div>
-              <div className={hoveringColor(val.name, "text-slate-600")}>
+              <div className="text-slate-50">
                 {val.tech}
               </div>
             </div>
-            <div className={hoveringColor(val.name, "text-slate-400")}>
+            <div className="text-slate-400">
               {val.description}
             </div>
           </div>
@@ -80,11 +77,12 @@ export function Console() {
   const [consoleHistory] = useStore(
     useShallow((state) => [state.consoleHistory])
   );
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const renderWhoAmIContent = () => {
     return (
-      <div className="flex flex-col font-mono py-4">
-        <div className="flex items-center gap-8">
+      <div className="flex flex-col font-mono py-8">
+        <div className="flex items-center justify-center gap-8">
           <Image
             className="rounded-full"
             src="/profilepic.png"
@@ -96,8 +94,8 @@ export function Console() {
             <div className="text-xl text-slate-50 font-semibold">
               Cole Cummins
             </div>
-            <div className="text-slate-600">
-              React / Typescript / Python / NextJS / Elasticsearch / Sequelize / Programming Languages
+            <div className="text-slate-400">
+              React / Typescript / Python / NextJS / Elasticsearch / Express
             </div>
           </div>
         </div>
@@ -124,34 +122,29 @@ export function Console() {
   const renderCommand = (command: Command, i: number) => {
     const validation = validateCommand(command.name);
     return (
-      <Fragment key={i}>
-        <div className="flex gap-2 font-mono font-semibold text-blue-500">
+      <div className="border-t border-slate-800 py-5 px-5" key={i}>
+        <div className="flex gap-2 font-mono font-semibold text-slate-600">
           {command.location === '/' ? 'colejcummins' : command.location} &gt;
-          <div className="text-slate-50 font-normal">{command.name}</div>
+          <div className="text-slate-600 font-normal">{command.name}</div>
         </div>
         {command.name === 'ls' && <LsContent />}
         {command.name === 'whoami' && renderWhoAmIContent()}
         {command.name === 'help' && renderValidation({message: ``})}
         {validation && renderValidation(validation)}
-      </Fragment>
-    );
-  }
-
-  const renderConsoleHistory = () => {
-    return (
-      <div className="flex flex-col">
-        {consoleHistory.map((command, i) => renderCommand(command, i))}
       </div>
     );
   }
 
-
-
   return (
-    <div className="flex flex-col h-[600px] px-2 py-2">
-      <div className="justify-self-end overflow-hidden">
-        {renderConsoleHistory()}
-        <ConsoleInput />
+    <div className="flex flex-col h-[700px]">
+      <div className="flex flex-col overflow-hidden flex-1 justify-end">
+        <div className="flex flex-col overflow-scroll">
+          {consoleHistory.map((command, i) => renderCommand(command, i))}
+        </div>
+        <div ref={scrollRef}/>
+      </div>
+      <div className="justify-self-end">
+        <ConsoleInput scrollRef={scrollRef}/>
       </div>
     </div>
   )

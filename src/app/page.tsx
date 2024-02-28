@@ -2,16 +2,12 @@ import Image from 'next/image';
 
 import {Console} from '@/components/Console';
 
-const EmptyCircle = () => {
-  return <div className="rounded-full h-4 w-4 border border-slate-800 "/>
-}
-
 export default function Home() {
   return (
     <div className="flex flex-1 items-center justify-center">
-      <div className="flex flex-col border rounded-lg border-slate-800 h-full w-2/3 backdrop-blur-xl">
+      <div className="flex flex-col border rounded-lg border-slate-800 h-full w-4/5 backdrop-blur-xl">
         <div className="flex gap-2 justify-start p-2 border-b border-slate-800">
-          {Array(3).fill(0).map(() => (<EmptyCircle />))}
+          {Array(3).fill(0).map(() => (<div className="rounded-full h-4 w-4 border border-slate-800 "/>))}
         </div>
         <Console />
       </div>
