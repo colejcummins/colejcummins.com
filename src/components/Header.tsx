@@ -1,18 +1,16 @@
-import {MarkGithubIcon} from '@primer/octicons-react';
+import { MarkGithubIcon } from '@primer/octicons-react';
 
 import Link from '@/components/Link';
 
 export function Header() {
   return (
-    <div className="flex justify-between items-center p-6 bg-slate-950">
+    <div className="flex justify-between items-center p-6">
       <Link href="/">
-        <div className="text-l font-mono font-semibold">
-          colejcummins
-        </div>
+        <div className="text-l font-mono font-semibold">colejcummins</div>
       </Link>
-      <Link href="https://github.com/colejcummins" >
-        <MarkGithubIcon size="medium" fill="inherit"/>
+      <Link href="https://github.com/colejcummins">
+        <MarkGithubIcon size="medium" fill="inherit" />
       </Link>
     </div>
-  )
+  );
 }
