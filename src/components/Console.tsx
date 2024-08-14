@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore } from '@/store';

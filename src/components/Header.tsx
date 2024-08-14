@@ -1,4 +1,5 @@
 import { MarkGithubIcon } from '@primer/octicons-react';
+import React from 'react';
 
 import Link from '@/components/Link';
 

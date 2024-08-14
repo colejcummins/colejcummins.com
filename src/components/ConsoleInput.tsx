@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useState, KeyboardEvent, RefObject, useRef, useEffect } from 'react';
+import React, { useState, KeyboardEvent, RefObject, useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore } from '@/store';
@@ -23,7 +23,7 @@ export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTML
 
   useEffect(() => {
     inputRef.current?.setSelectionRange(inputValue.length, inputValue.length);
-  }, [historyIndex]);
+  }, [historyIndex, inputValue]);
 
   const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter' && inputValue !== '') {
@@ -51,7 +51,7 @@ export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTML
         {pathname === '/' ? 'colejcummins' : pathname} &gt;
       </label>
       <div className="relative flex flex-1">
-        <div className="absolute flex gap-2 font-mono text-slate-600">{auto}</div>
+        <div className="absolute flex gap-2 font-mono whitespace-pre text-slate-600">{auto}</div>
         <input
           id="terminal"
           type="text"

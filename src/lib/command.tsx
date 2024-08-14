@@ -1,10 +1,13 @@
+'use client';
+
 import Image from 'next/image';
+import React from 'react';
 
 import Link from '@/components/Link';
 import { AppStore } from '@/store';
 
 interface Command {
-  render?: (args: string[]) => JSX.Element;
+  render?: (args: string[]) => React.JSX.Element;
   autocomplete?: (args: string[]) => string | undefined;
   validate?: (args: string[]) => string | undefined;
   execute?: (args: string[], store: AppStore) => void;
@@ -65,9 +68,9 @@ const renderLsContent = () => {
 
 const renderWhoAmIContent = () => {
   return (
-    <div className="flex flex-1 flex-col justify-center font-mono py-8">
+    <div className="flex flex-1 flex-col justify-center font-mono py-5">
       <Link href="https://github.com/colejcummins" target="_blank">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-5">
           <Image
             className="rounded-full"
             src="/profilepic.png"
@@ -96,7 +99,7 @@ export const commands: Record<string, Command> = {
   },
   man: {
     autocomplete: (args: string[]) => {
-      return validCommands.find((man) => args[0] !== '' && man.startsWith(args[0]));
+      return validCommands.find((man) => man.startsWith(args[0]));
     },
     validate: (args: string[]) => {
       if (args.length !== 1) {
@@ -113,7 +116,7 @@ export const commands: Record<string, Command> = {
   },
   open: {
     autocomplete: (args: string[]) => {
-      return validDirs.find((open) => args[0] !== '' && open.startsWith(args[0]));
+      return validDirs.find((open) => open.startsWith(args[0]));
     },
     validate: (args: string[]) => {
       if (args.length !== 1) {
@@ -139,11 +142,12 @@ export const autocomplete = (input: string) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!args.length) {
-    return validCommands.find((man) => args[0] !== '' && man.startsWith(args[0])) || '';
+    return validCommands.find((man) => man.startsWith(command)) || '';
   }
 
   if (command in commands && args.length) {
-    return commands[command].autocomplete?.(args) || '';
+    const complete = commands[command].autocomplete?.(args) || '';
+    return input.replace(new RegExp(args[0] + '$'), complete);
   }
 
   return '';
