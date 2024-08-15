@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { useAppStore } from '@/store';
 import { autocomplete, execute, validate } from '@/lib/command';
 
-export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTMLDivElement> }) => {
+export const ConsoleInput = observer(() => {
   const pathname = usePathname();
   const store = useAppStore();
   const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex } = store;
@@ -33,7 +33,6 @@ export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTML
       }
       setInputValue('');
       clearIndex();
-      scrollRef.current?.scrollIntoView();
     } else if (evt.key === 'ArrowUp' && consoleHistory && historyIndex < consoleHistory.length) {
       changeIndex(1);
       const newValue = consoleHistory[consoleHistory.length - historyIndex - 1];

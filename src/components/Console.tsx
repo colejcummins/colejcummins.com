@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore } from '@/store';
@@ -18,6 +18,12 @@ import { render, validate } from '@/lib/command';
 export const Console = observer(() => {
   const { consoleHistory } = useAppStore();
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+    }
+  }, [consoleHistory.length, scrollRef]);
 
   const renderValidation = (validation: string) => {
     return (
@@ -41,14 +47,13 @@ export const Console = observer(() => {
 
   return (
     <div className="flex flex-col h-[700px]">
-      <div className="flex flex-col overflow-hidden flex-1">
-        <div className="flex flex-col overflow-scroll">
+      <div className="flex flex-col overflow-hidden flex-1 justify-end">
+        <div className="flex flex-col overflow-scroll" ref={scrollRef}>
           {consoleHistory.map((command, i) => renderCommand(command, i))}
         </div>
-        <div ref={scrollRef} />
       </div>
       <div className="justify-self-end">
-        <ConsoleInput scrollRef={scrollRef} />
+        <ConsoleInput />
       </div>
     </div>
   );

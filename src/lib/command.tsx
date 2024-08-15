@@ -112,7 +112,7 @@ export const commands: Record<string, Command> = {
       return '';
     },
     render: (args: string[]) => {
-      return <div className="font-mono text-slate-300">{commandMan[args[0]]}</div>;
+      return <div className="font-mono text-slate-950 dark:text-slate-50">{commandMan[args[0]]}</div>;
     }
   },
   open: {
