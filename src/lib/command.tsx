@@ -18,7 +18,8 @@ export const commandMan: Record<string, string> = {
   whoami: 'Displays effective user id',
   open: 'Opens a new tab navigating to a listed project',
   ls: 'Lists directory contents',
-  clear: 'Clears console and command history'
+  clear: 'Clears console and command history',
+  mode: 'Changes the current color mode',
 };
 
 export const lsContent = [
@@ -53,7 +54,7 @@ const renderLsContent = () => {
     <div className="grid grid-cols-2 gap-y-8 gap-x-12 w-full py-4">
       {lsContent.map((val) => (
         <Link key={val.name} href={val.link} target="_blank">
-          <div className="flex flex-col font-mono font-normal">
+          <div className="flex flex-col font-normal">
             <div className="flex justify-between">
               <div>{val.name}</div>
               <div>{val.tech}</div>
@@ -68,7 +69,7 @@ const renderLsContent = () => {
 
 const renderWhoAmIContent = () => {
   return (
-    <div className="flex flex-1 flex-col justify-center font-mono py-5">
+    <div className="flex flex-1 flex-col justify-center py-5">
       <Link href="https://github.com/colejcummins" target="_blank">
         <div className="flex items-center gap-5">
           <Image
@@ -88,7 +89,7 @@ const renderWhoAmIContent = () => {
   );
 };
 
-const validCommands = ['man', 'whoami', 'open', 'ls', 'clear'];
+const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode'];
 const validDirs = ['pyssect', 'minilang-compiler', 'asciizer', 'react-select'];
 export const commands: Record<string, Command> = {
   ls: {
@@ -134,15 +135,30 @@ export const commands: Record<string, Command> = {
   clear: {
     execute: (_, store: AppStore) => {
       store.clearHistory();
+      store.clearIndex();
     }
-  }
+  },
+  mode: {
+    autocomplete: (args: string[]) => {
+      return args.length > 0 ? ['light', 'dark'].find((mode) => mode.startsWith(args[0])): ''
+    },
+    validate: (args: string[]) => {
+      if (args.length && !['light', 'dark'].includes(args[0])) {
+        return `${args} is not a valid argument\nValid arguments: light, dark`
+      }
+      return ''
+    },
+    execute: (args: string[], store: AppStore) => {
+      store.setLightMode(args.length > 0 ? args[0] === 'light' : !store.lightMode)
+    }
+  },
 };
 
 export const autocomplete = (input: string) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!args.length) {
-    return validCommands.find((man) => man.startsWith(command)) || '';
+    return validCommands.sort((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) || '';
   }
 
   if (command in commands && args.length) {

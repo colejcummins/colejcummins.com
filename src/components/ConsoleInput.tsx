@@ -5,7 +5,7 @@ import React, { useState, KeyboardEvent, RefObject, useRef, useEffect } from 're
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore } from '@/store';
-import { autocomplete, execute } from '@/lib/command';
+import { autocomplete, execute, validate } from '@/lib/command';
 
 export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTMLDivElement> }) => {
   const pathname = usePathname();
@@ -28,7 +28,9 @@ export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTML
   const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter' && inputValue !== '') {
       addHistory(inputValue);
-      execute(inputValue, store);
+      if (!validate(inputValue)) {
+        execute(inputValue, store);
+      }
       setInputValue('');
       clearIndex();
       scrollRef.current?.scrollIntoView();
@@ -46,17 +48,17 @@ export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTML
   };
 
   return (
-    <div className="flex gap-2 px-5 py-5 border-t border-slate-700">
-      <label className="font-mono font-semibold text-blue-500" htmlFor="terminal">
+    <div className="flex gap-2 px-5 py-5 border-t border-slate-200 dark:border-slate-700">
+      <label className="font-mono font-semibold text-blue-600 dark:text-blue-500" htmlFor="terminal">
         {pathname === '/' ? 'colejcummins' : pathname} &gt;
       </label>
       <div className="relative flex flex-1">
-        <div className="absolute flex gap-2 font-mono whitespace-pre text-slate-600">{auto}</div>
+        <div className="absolute flex gap-2 font-mono whitespace-pre text-slate-400 dark:text-slate-600">{auto}</div>
         <input
           id="terminal"
           type="text"
           spellCheck="false"
-          className="text-slate-50 z-10 flex-1 font-mono font-normal border-none outline-none bg-transparent caret-transparent"
+          className="text-slate-950 dark:text-slate-50 z-10 flex-1 font-mono font-normal border-none outline-none bg-transparent caret-transparent"
           ref={inputRef}
           value={inputValue}
           onChange={(evt) => setInputValue(evt.target.value)}
@@ -66,7 +68,7 @@ export const ConsoleInput = observer(({ scrollRef }: { scrollRef: RefObject<HTML
         />
         {inputFocused && (
           <div
-            className="absolute h-6 w-0.5 bg-white rounded-full animate-blink"
+            className="absolute h-6 w-0.5 bg-blue-600 dark:bg-blue-500 rounded-full animate-blink"
             style={{
               left: `calc(${inputValue.length} * 0.602rem)`
             }}

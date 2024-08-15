@@ -3,13 +3,15 @@ import { makeAutoObservable, action } from 'mobx';
 export class AppStore {
   consoleHistory: string[] = [];
   historyIndex: number = 0;
+  lightMode: boolean = false;
 
   constructor() {
     makeAutoObservable(this, {
       clearIndex: action.bound,
       clearHistory: action.bound,
       addHistory: action.bound,
-      changeIndex: action.bound
+      changeIndex: action.bound,
+      setLightMode: action.bound
     });
   }
 
@@ -18,7 +20,7 @@ export class AppStore {
   }
 
   clearHistory() {
-    this.consoleHistory = [];
+    this.consoleHistory = this.consoleHistory.slice(-1);
   }
 
   addHistory(command: string) {
@@ -27,5 +29,9 @@ export class AppStore {
 
   changeIndex(num: number) {
     this.historyIndex += num;
+  }
+
+  setLightMode(lightMode: boolean) {
+    this.lightMode = lightMode
   }
 }
