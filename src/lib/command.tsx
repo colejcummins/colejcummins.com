@@ -5,10 +5,11 @@ import React from 'react';
 
 import Link from '@/components/Link';
 import { AppStore } from '@/store';
+import { getCur, FsDirectory } from '@/lib/fs';
 
 interface Command {
-  render?: (args: string[]) => React.JSX.Element;
-  autocomplete?: (args: string[]) => string | undefined;
+  render?: (args: string[], store: AppStore) => React.JSX.Element;
+  autocomplete?: (args: string[], store: AppStore) => string | undefined;
   validate?: (args: string[]) => string | undefined;
   execute?: (args: string[], store: AppStore) => void;
 }
@@ -132,6 +133,13 @@ export const commands: Record<string, Command> = {
       window.open(lsContent.find((f) => f.name === args[0])?.link);
     }
   },
+  cd: {
+    autocomplete: (args: string[], store: AppStore) => {
+      const childNames = (getCur(store.currentNode) as FsDirectory).children;
+      return childNames.find((name) => name.startsWith(args[0]));
+    },
+
+  },
   clear: {
     execute: (_, store: AppStore) => {
       store.clearHistory();
@@ -154,7 +162,7 @@ export const commands: Record<string, Command> = {
   },
 };
 
-export const autocomplete = (input: string) => {
+export const autocomplete = (input: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!args.length) {
@@ -162,7 +170,7 @@ export const autocomplete = (input: string) => {
   }
 
   if (command in commands && args.length) {
-    const complete = commands[command].autocomplete?.(args) || '';
+    const complete = commands[command].autocomplete?.(args, store) || '';
     return input.replace(new RegExp(args[0] + '$'), complete);
   }
 
@@ -181,11 +189,11 @@ export const validate = (input: string) => {
   }
 };
 
-export const render = (input: string) => {
+export const render = (input: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (command in commands) {
-    return commands[command].render?.(args);
+    return commands[command].render?.(args, store);
   }
 };
 

@@ -4,6 +4,7 @@ export class AppStore {
   consoleHistory: string[] = [];
   historyIndex: number = 0;
   lightMode: boolean = false;
+  currentNode: string = 'colejcummins';
 
   constructor() {
     makeAutoObservable(this, {

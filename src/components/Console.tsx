@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { useAppStore } from '@/store';
 import { ConsoleInput } from '@/components/ConsoleInput';
 import { render, validate } from '@/lib/command';
+import { getCur } from '@/lib/fs';
 
 /**
  * TODO
@@ -16,7 +17,8 @@ import { render, validate } from '@/lib/command';
  */
 
 export const Console = observer(() => {
-  const { consoleHistory } = useAppStore();
+  const store = useAppStore();
+  const { consoleHistory, currentNode } = store;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,10 +38,10 @@ export const Console = observer(() => {
     return (
       <div className="border-t border-slate-200 dark:border-slate-700 py-5 px-5 font-mono text-slate-950 dark:text-slate-50" key={i}>
         <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-600">
-          colejcummins &gt;
+          {getCur(currentNode).name} &gt;
           <div className="font-normal">{command}</div>
         </div>
-        {!validation && render(command)}
+        {!validation && render(command, store)}
         {validation && renderValidation(validation)}
       </div>
     );
