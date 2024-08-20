@@ -5,22 +5,24 @@ import React from 'react';
 
 import Link from '@/components/Link';
 import { AppStore } from '@/store';
-import { getCur, FsDirectory } from '@/lib/fs';
+import { getChildren, ROOTNAME, getParent } from '@/lib/fs';
 
 interface Command {
   render?: (args: string[], store: AppStore) => React.JSX.Element;
   autocomplete?: (args: string[], store: AppStore) => string | undefined;
-  validate?: (args: string[]) => string | undefined;
+  validate?: (args: string[], store: AppStore) => string | undefined;
   execute?: (args: string[], store: AppStore) => void;
 }
 
 export const commandMan: Record<string, string> = {
   man: 'Man',
-  whoami: 'Displays effective user id',
+  whoami: 'Displays effective user id. Usage:\nwhoami',
   open: 'Opens a new tab navigating to a listed project',
-  ls: 'Lists directory contents',
-  clear: 'Clears console and command history',
-  mode: 'Changes the current color mode',
+  ls: 'Lists directory contents. Usage:\nls [ -l | -a ]',
+  clear: 'Clears console and command history. Usage:\nclear',
+  mode: 'Changes the current color mode. Usage:\nmode [ light | dark ]',
+  pwd: 'Displays the current working directory. Usage:\npwd',
+  cd: 'Changes current directory. Usage:\ncd [ . | .. | directory_name ]'
 };
 
 export const lsContent = [
@@ -50,17 +52,14 @@ export const lsContent = [
   }
 ];
 
-const renderLsContent = () => {
+const renderLsContent = (args: string[], store: AppStore) => {
+  const children = getChildren(store.currentNode);
   return (
-    <div className="grid grid-cols-2 gap-y-8 gap-x-12 w-full py-4">
-      {lsContent.map((val) => (
-        <Link key={val.name} href={val.link} target="_blank">
-          <div className="flex flex-col font-normal">
-            <div className="flex justify-between">
-              <div>{val.name}</div>
-              <div>{val.tech}</div>
-            </div>
-            {val.description}
+    <div className="grid grid-cols-6 gap-y-8 gap-x-12 w-full py-4">
+      {children.map((child) => (
+        <Link key={child.name} href={""} >
+          <div className="text-blue-500 dark:text-blue-300">
+            {child.name}
           </div>
         </Link>
       ))}
@@ -71,7 +70,7 @@ const renderLsContent = () => {
 const renderWhoAmIContent = () => {
   return (
     <div className="flex flex-1 flex-col justify-center py-5">
-      <Link href="https://github.com/colejcummins" target="_blank">
+      <Link href="https://github.com/colejcummins">
         <div className="flex items-center gap-5">
           <Image
             className="rounded-full"
@@ -90,7 +89,7 @@ const renderWhoAmIContent = () => {
   );
 };
 
-const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode'];
+const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode', 'cd', 'pwd'];
 const validDirs = ['pyssect', 'minilang-compiler', 'asciizer', 'react-select'];
 export const commands: Record<string, Command> = {
   ls: {
@@ -105,15 +104,15 @@ export const commands: Record<string, Command> = {
     },
     validate: (args: string[]) => {
       if (args.length !== 1) {
-        return `man expects 1 argument\nValid arguments: ${validCommands.join(',')}`;
+        return `man expects 1 argument. Valid arguments:\n${validCommands.join(' ')}`;
       }
       if (!validCommands.includes(args[0])) {
-        return `${args} is not a valid argument\nValid arguments: ${validCommands.join(', ')}`;
+        return `${args} is not a valid argument. Valid arguments:\n${validCommands.join(' ')}`;
       }
       return '';
     },
     render: (args: string[]) => {
-      return <div className="font-mono text-slate-950 dark:text-slate-50">{commandMan[args[0]]}</div>;
+      return <pre className="font-mono text-slate-950 dark:text-slate-50">{commandMan[args[0]]}</pre>;
     }
   },
   open: {
@@ -122,10 +121,10 @@ export const commands: Record<string, Command> = {
     },
     validate: (args: string[]) => {
       if (args.length !== 1) {
-        return `open expects 1 argument\nValid arguments: ${validDirs.join(',')}`;
+        return `open expects 1 argument. Valid arguments:\n${validDirs.join(' ')}`;
       }
       if (!validDirs.includes(args[0])) {
-        return `${args} is not a valid argument\nValid arguments: ${validDirs.join(', ')}`;
+        return `${args} is not a valid argument. Valid arguments:\n${validDirs.join(' ')}`;
       }
       return '';
     },
@@ -135,10 +134,23 @@ export const commands: Record<string, Command> = {
   },
   cd: {
     autocomplete: (args: string[], store: AppStore) => {
-      const childNames = (getCur(store.currentNode) as FsDirectory).children;
-      return childNames.find((name) => name.startsWith(args[0]));
+      return store.validCdTargets.find((name) => name.startsWith(args[0]));
     },
-
+    validate: (args: string[], store: AppStore) => {
+      if (args.length > 0 && !store.validCdTargets.includes(args[0])) {
+        return `${args[0]} is not a valid argument. Valid arguments:\n${store.validCdTargets.join(' ')}`
+      }
+      return '';
+    },
+    execute: (args: string[], store: AppStore) => {
+      if (args.length === 0) {
+        store.goToNode(ROOTNAME);
+      } else if (args[0] === '..') {
+        store.goToNode(getParent(store.currentNode).name);
+      } else {
+        store.goToNode(args[0]);
+      }
+    }
   },
   clear: {
     execute: (_, store: AppStore) => {
@@ -177,15 +189,15 @@ export const autocomplete = (input: string, store: AppStore) => {
   return '';
 };
 
-export const validate = (input: string) => {
+export const validate = (input: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!(command in commands)) {
-    return `${command} is not recognized. Valid commands ${validCommands.join(', ')}`;
+    return `${command} is not recognized. Valid commands:\n${validCommands.join(' ')}`;
   }
 
   if (command in commands && args.length) {
-    return commands[command].validate?.(args);
+    return commands[command].validate?.(args, store);
   }
 };
 

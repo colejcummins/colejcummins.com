@@ -1,10 +1,17 @@
 import { makeAutoObservable, action } from 'mobx';
+import { getValidCdTargets, ROOTNAME } from '@/lib/fs';
+
+export interface HistoryItem {
+  text: string;
+  validation: string;
+  location: string;
+}
 
 export class AppStore {
-  consoleHistory: string[] = [];
+  consoleHistory: HistoryItem[] = [];
   historyIndex: number = 0;
   lightMode: boolean = false;
-  currentNode: string = 'colejcummins';
+  currentNode: string = ROOTNAME;
 
   constructor() {
     makeAutoObservable(this, {
@@ -12,8 +19,18 @@ export class AppStore {
       clearHistory: action.bound,
       addHistory: action.bound,
       changeIndex: action.bound,
-      setLightMode: action.bound
+      setLightMode: action.bound,
+      goToNode: action.bound,
     });
+  }
+
+  get validCdTargets(): string[] {
+    return getValidCdTargets(this.currentNode);
+  }
+
+  goToNode(nodeName: string) {
+    console.log(nodeName)
+    this.currentNode = nodeName;
   }
 
   clearIndex() {
@@ -24,8 +41,8 @@ export class AppStore {
     this.consoleHistory = this.consoleHistory.slice(-1);
   }
 
-  addHistory(command: string) {
-    this.consoleHistory.push(command);
+  addHistory(text: string, validation: string, location: string) {
+    this.consoleHistory.push({text, validation, location});
   }
 
   changeIndex(num: number) {

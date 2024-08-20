@@ -14,11 +14,13 @@ interface FsFile {
   download?: string;
 }
 
+export const ROOTNAME = 'colejcummins';
+
 export const fs: Record<string, FsDirectory | FsFile> = {
   colejcummins: {
     type: 'directory',
     name: 'colejcummins',
-    parent: '??',
+    parent: 'colejcummins',
     children: [
       'resume.pdf',
       'resume-dark.pdf',
@@ -47,7 +49,7 @@ export const fs: Record<string, FsDirectory | FsFile> = {
     name: 'pyssect',
     parent: 'colejcummins',
     tech: 'Python / React / Nodejs',
-    children: ['pyssect/repo', 'pyssect/READEME.md'],
+    children: ['pyssect/repo', 'pyssect/README.md'],
   },
   'pyssect/repo': {
     type: 'file',
@@ -163,11 +165,16 @@ export const getChildren = (cur: string): Array<FsDirectory | FsFile> => {
   return (fs[cur] as FsDirectory).children.map((child) => fs[child])
 }
 
+export const getValidCdTargets = (cur: string): string[] => {
+  const defaults = ['colejcummins', '..', '.'];
+  return [...defaults, ...getChildren(cur).filter((node) => node.type === 'directory').map((node) => node.name)];
+}
+
 export const getParent = (cur: string): FsDirectory | FsFile => {
   return fs[(fs[cur] as FsDirectory).parent];
 }
 
-export const permissions = (fName: string) => {
+export const getPermissions = (fName: string) => {
   const cur = fs[fName];
   const isDir = cur.type === 'directory';
   const execFlag = isDir ? 'x' : '-';

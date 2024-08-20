@@ -1,21 +1,20 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import React, { useState, KeyboardEvent, RefObject, useRef, useEffect } from 'react';
+import React, { useState, KeyboardEvent, useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore } from '@/store';
 import { autocomplete, execute, validate } from '@/lib/command';
+import { getCur } from '@/lib/fs';
 
 export const ConsoleInput = observer(() => {
-  const pathname = usePathname();
   const store = useAppStore();
-  const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex } = store;
+  const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex, currentNode } = store;
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const auto = autocomplete(inputValue);
+  const auto = autocomplete(inputValue, store);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -27,20 +26,21 @@ export const ConsoleInput = observer(() => {
 
   const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter' && inputValue !== '') {
-      addHistory(inputValue);
-      if (!validate(inputValue)) {
+      const validation = validate(inputValue, store) || '';
+      addHistory(inputValue, validation, getCur(currentNode).name);
+      if (!validation) {
         execute(inputValue, store);
       }
       setInputValue('');
       clearIndex();
     } else if (evt.key === 'ArrowUp' && consoleHistory && historyIndex < consoleHistory.length) {
       changeIndex(1);
-      const newValue = consoleHistory[consoleHistory.length - historyIndex - 1];
-      setInputValue(newValue);
+      const {text} = consoleHistory[consoleHistory.length - historyIndex - 1];
+      setInputValue(text);
     } else if (evt.key === 'ArrowDown' && consoleHistory && historyIndex > 0) {
       changeIndex(-1);
-      const newValue = historyIndex > 1 ? consoleHistory[consoleHistory.length - historyIndex + 1] : '';
-      setInputValue(newValue);
+      const {text} = historyIndex > 1 ? consoleHistory[consoleHistory.length - historyIndex + 1] : {text: ''};
+      setInputValue(text);
     } else if (evt.key === 'ArrowRight' && auto) {
       setInputValue(auto);
     }
@@ -49,7 +49,7 @@ export const ConsoleInput = observer(() => {
   return (
     <div className="flex gap-2 px-5 py-5 border-t border-slate-200 dark:border-slate-700">
       <label className="font-mono font-semibold text-blue-600 dark:text-blue-500" htmlFor="terminal">
-        {pathname === '/' ? 'colejcummins' : pathname} &gt;
+        {getCur(currentNode).name} &gt;
       </label>
       <div className="relative flex flex-1">
         <div className="absolute flex gap-2 font-mono whitespace-pre text-slate-400 dark:text-slate-600">{auto}</div>
