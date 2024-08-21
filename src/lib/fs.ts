@@ -1,24 +1,18 @@
-export interface FsDirectory {
-  type: 'directory',
+export interface FsObject {
+  id: string;
   name: string;
-  tech?: string;
-  children: string[];
   parent: string;
-}
-
-interface FsFile {
-  type: 'file',
-  name: string;
   tech?: string;
+  children?: string[];
   link?: string;
   download?: string;
 }
 
 export const ROOTNAME = 'colejcummins';
 
-export const fs: Record<string, FsDirectory | FsFile> = {
+export const fs: Record<string, FsObject> = {
   colejcummins: {
-    type: 'directory',
+    id: 'colejcummins',
     name: 'colejcummins',
     parent: 'colejcummins',
     children: [
@@ -33,116 +27,128 @@ export const fs: Record<string, FsDirectory | FsFile> = {
     ],
   },
   'resume.pdf': {
-    type: 'file',
+    id: 'resume.pdf',
     name: 'resume.pdf',
+    parent: 'colejcummins',
     tech: 'PDF',
     download: 'ColeCumminsResume2024.pdf'
   },
   'resume-dark.pdf': {
-    type: 'file',
+    id: 'resume-dark.pdf',
     name: 'resume-dark.pdf',
+    parent: 'colejcummins',
     tech: 'PDF',
     download: 'ColeCumminsResume2024Dark.pdf'
   },
   'pyssect': {
-    type: 'directory',
+    id: 'pyssect',
     name: 'pyssect',
     parent: 'colejcummins',
     tech: 'Python / React / Nodejs',
     children: ['pyssect/repo', 'pyssect/README.md'],
   },
   'pyssect/repo': {
-    type: 'file',
+    id: 'pyssect/repo',
     name: 'repo',
+    parent: 'pyssect',
     tech: 'Python / React / Nodejs',
     link: 'https://github.com/colejcummins/pyssect'
   },
   'pyssect/README.md': {
-    type: 'file',
+    id: 'pyssect/README.md',
     name: 'README.md',
+    parent: 'pyssect',
     tech: 'Markdown',
     link: 'https://github.com/colejcummins/pyssect/blob/main/README.md'
   },
   'minilang-compiler': {
-    type: 'directory',
+    id: 'minilang-compiler',
     name: 'minilang-compiler',
     parent: 'colejcummins',
     tech: 'Java / Clang',
     children: ['minilang-compiler/repo', 'minilang-compiler/README.md'],
   },
   'minilang-compiler/repo': {
-    type: 'file',
+    id: 'minilang-compiler/repo',
     name: 'repo',
+    parent: 'minilang-compiler',
     tech: 'Java / Clang',
     link: 'https://github.com/colejcummins/minilang-compiler'
   },
   'minilang-compiler/README.md': {
-    type: 'file',
+    id: 'minilang-compiler/README.md',
     name: 'README.md',
+    parent: 'minilang-compiler',
     tech: 'Markdown',
     link: 'https://github.com/colejcummins/minilang-compiler/blob/main/README.md'
   },
   'llvm-syntax-highlighting': {
-    type: 'directory',
+    id: 'llvm-syntax-highlighting',
     name: 'llvm-syntax-highlighting',
     tech: 'LLVM / JSON',
     parent: 'colejcummins',
     children: ['llvm-syntax-highlighting/repo', 'llvm-syntax-highlighting/README.md']
   },
   'llvm-syntax-highlighting/repo': {
-    type: 'file',
+    id: 'llvm-syntax-highlighting/repo',
     name: 'repo',
+    parent: 'llvm-syntax-highlighting',
     tech: 'LLVM / JSON',
     link: 'https://github.com/colejcummins/llvm-syntax-highlighting'
   },
   'llvm-syntax-highlighting/README.md': {
-    type: 'file',
+    id: 'llvm-syntax-highlighting/README.md',
     name: 'README.md',
+    parent: 'llvm-syntax-highlighting',
     tech: 'Markdown',
     link: 'https://github.com/colejcummins/llvm-syntax-highlighting/blob/main/README.md'
   },
   'react-search-modal': {
-    type: 'directory',
+    id: 'react-search-modal',
     name: 'react-search-modal',
     tech: 'React / Elasticsearch',
     parent: 'colejcummins',
     children: [],
   },
   'image-to-ascii': {
-    type: 'directory',
+    id: 'image-to-ascii',
     name: 'image-to-ascii',
     tech: 'Python',
     parent: 'colejcummins',
     children: ['image-to-ascii/repo', 'image-to-ascii/README.md']
   },
   'image-to-ascii/repo': {
-    type: 'file',
+    id: 'image-to-ascii/repo',
     name: 'repo',
+    parent: 'image-to-ascii',
     tech: 'Python',
     link: 'https://github.com/colejcummins/image-to-ascii'
   },
   'image-to-ascii/README.md': {
-    type: 'file',
+    id: 'image-to-ascii/README.md',
     name: 'README.md',
+    parent: 'image-to-ascii',
     tech: 'Markdown',
     link: 'https://github.com/colejcummins/image-to-ascii/blob/main/README.md'
   },
   'learn-crypto': {
-    type: 'directory',
+    id: 'learn-crypto',
     name: 'learn-crypto',
     tech: 'Python / Cryptography',
     parent: 'colejcummins',
     children: ['learn-crypto/repo', 'learn-crypto/README.md']
   },
   'learn-crypto/repo': {
-    type: 'file',
+    id: 'learn-crypto/repo',
     name: 'repo',
+    parent: 'learn-crypto',
     tech: 'Python / Cryptography',
     link: 'https://github.com/colejcummins/learn-crypto',
   },
   'learn-crypto/README.md': {
-    type: 'file',
+    id: 'learn-crypto/README.md',
     name: 'README.md',
+    parent: 'learn-crypto',
     tech: 'Markdown',
     link: 'https://github.com/colejcummins/learn-crypto/blob/master/README.md'
   }
@@ -151,32 +157,30 @@ export const fs: Record<string, FsDirectory | FsFile> = {
 export const outputPwd = (cur: string) => {
   const outputList = [fs[cur].name];
   while (cur !== 'colejcummins') {
-    cur = fs[(fs[cur] as FsDirectory).parent].name;
+    cur = fs[fs[cur].parent].name;
     outputList.unshift(cur);
   }
   return outputList.join('/');
 }
 
-export const getCur = (cur: string): FsDirectory | FsFile => {
+export const getCur = (cur: string): FsObject => {
   return fs[cur];
 }
 
-export const getChildren = (cur: string): Array<FsDirectory | FsFile> => {
-  return (fs[cur] as FsDirectory).children.map((child) => fs[child])
+export const getChildren = (cur: string): FsObject[] => {
+  return fs[cur].children?.map((child) => fs[child]) ?? []
 }
 
 export const getValidCdTargets = (cur: string): string[] => {
   const defaults = ['colejcummins', '..', '.'];
-  return [...defaults, ...getChildren(cur).filter((node) => node.type === 'directory').map((node) => node.name)];
+  return [...defaults, ...getChildren(cur).filter((node) => node.children).map((node) => node.name)];
 }
 
-export const getParent = (cur: string): FsDirectory | FsFile => {
-  return fs[(fs[cur] as FsDirectory).parent];
+export const getParent = (cur: string): FsObject => {
+  return fs[fs[cur].parent];
 }
 
-export const getPermissions = (fName: string) => {
-  const cur = fs[fName];
-  const isDir = cur.type === 'directory';
-  const execFlag = isDir ? 'x' : '-';
-  return `${isDir ? 'd' : '-'}rw${execFlag}r-${execFlag}r-${execFlag}@`;
+export const getPermissions = (cur: string) => {
+  const execFlag = fs[cur].children ? 'x' : '-';
+  return `${fs[cur].children ? 'd' : '-'}rw${execFlag}r-${execFlag}r-${execFlag}@`;
 }

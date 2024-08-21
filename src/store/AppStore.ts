@@ -29,7 +29,6 @@ export class AppStore {
   }
 
   goToNode(nodeName: string) {
-    console.log(nodeName)
     this.currentNode = nodeName;
   }
 

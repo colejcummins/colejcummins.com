@@ -5,10 +5,10 @@ import React from 'react';
 
 import Link from '@/components/Link';
 import { AppStore } from '@/store';
-import { getChildren, ROOTNAME, getParent } from '@/lib/fs';
+import { getChildren, ROOTNAME, getParent, outputPwd, getPermissions } from '@/lib/fs';
 
 interface Command {
-  render?: (args: string[], store: AppStore) => React.JSX.Element;
+  render?: (args: string[], location: string) => React.JSX.Element;
   autocomplete?: (args: string[], store: AppStore) => string | undefined;
   validate?: (args: string[], store: AppStore) => string | undefined;
   execute?: (args: string[], store: AppStore) => void;
@@ -52,15 +52,26 @@ export const lsContent = [
   }
 ];
 
-const renderLsContent = (args: string[], store: AppStore) => {
-  const children = getChildren(store.currentNode);
-  return (
-    <div className="grid grid-cols-6 gap-y-8 gap-x-12 w-full py-4">
-      {children.map((child) => (
-        <Link key={child.name} href={""} >
-          <div className="text-blue-500 dark:text-blue-300">
-            {child.name}
+const renderLsContent = (args: string[], location: string) => {
+  const children = getChildren(location);
+
+  if (args[0] === '-l') {
+    return (
+      <div className="flex flex-col">
+        {children.map((child) => (
+          <div>
+            {getPermissions(child.id)}
           </div>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-y-2 gap-x-2 w-full py-4" style={{gridTemplateColumns: "repeat(4, minmax(240px, 1fr))"}}>
+      {children.map((child) => (
+        <Link key={child.id} href={""} >
+          {child.name}
         </Link>
       ))}
     </div>
@@ -147,8 +158,10 @@ export const commands: Record<string, Command> = {
         store.goToNode(ROOTNAME);
       } else if (args[0] === '..') {
         store.goToNode(getParent(store.currentNode).name);
+      } else if (args[0] === '.') {
+        return;
       } else {
-        store.goToNode(args[0]);
+        store.goToNode(args[0])
       }
     }
   },
@@ -172,6 +185,11 @@ export const commands: Record<string, Command> = {
       store.setLightMode(args.length > 0 ? args[0] === 'light' : !store.lightMode)
     }
   },
+  pwd: {
+    render: (_, location: string) => {
+      return <>{outputPwd(location)}</>
+    }
+  }
 };
 
 export const autocomplete = (input: string, store: AppStore) => {
@@ -201,11 +219,11 @@ export const validate = (input: string, store: AppStore) => {
   }
 };
 
-export const render = (input: string, store: AppStore) => {
+export const render = (input: string, location: string) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (command in commands) {
-    return commands[command].render?.(args, store);
+    return commands[command].render?.(args, location);
   }
 };
 

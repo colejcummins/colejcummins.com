@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore, HistoryItem } from '@/store';
@@ -16,9 +16,22 @@ import { getCur } from '@/lib/fs';
  * light mode
  */
 
+const Command = memo(({text, validation, location}: HistoryItem ) => {
+  return (
+    <div className="border-t border-slate-200 dark:border-slate-800 py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
+      <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-600">
+        {location} &gt;
+        <div className="font-normal">{text}</div>
+      </div>
+      {!validation && render(text, location)}
+      {validation && <div className="text-slate-400 dark:text-slate-600 font-mono">{validation}</div>}
+    </div>
+  );
+});
+
 export const Console = observer(() => {
   const store = useAppStore();
-  const { consoleHistory, currentNode } = store;
+  const { consoleHistory } = store;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,28 +40,11 @@ export const Console = observer(() => {
     }
   }, [consoleHistory.length, scrollRef]);
 
-  const renderValidation = (validation: string) => {
-    return validation && <pre className="text-slate-400 dark:text-slate-600 font-mono">{validation}</pre>
-  };
-
-  const renderCommand = ({text, validation, location}: HistoryItem, i: number) => {
-    return (
-      <div className="border-t border-slate-200 dark:border-slate-700 py-5 px-5 font-mono text-slate-950 dark:text-slate-50" key={i}>
-        <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-600">
-          {location} &gt;
-          <div className="font-normal">{text}</div>
-        </div>
-        {!validation && render(text, store)}
-        {validation && renderValidation(validation)}
-      </div>
-    );
-  };
-
   return (
     <div className="flex flex-col h-[700px]">
       <div className="flex flex-col overflow-hidden flex-1 justify-end">
         <div className="flex flex-col overflow-scroll" ref={scrollRef}>
-          {consoleHistory.map((item, i) => renderCommand(item, i))}
+          {consoleHistory.map((item, i) => <Command {...item}/>)}
         </div>
       </div>
       <div className="justify-self-end">
