@@ -23,8 +23,8 @@ export const fs: Record<string, FsObject> = {
       'minilang-compiler',
       'learn-crypto',
       'image-to-ascii',
-      'react-search-modal',
-    ],
+      'react-search-modal'
+    ]
   },
   'resume.pdf': {
     id: 'resume.pdf',
@@ -40,12 +40,12 @@ export const fs: Record<string, FsObject> = {
     tech: 'PDF',
     download: 'ColeCumminsResume2024Dark.pdf'
   },
-  'pyssect': {
+  pyssect: {
     id: 'pyssect',
     name: 'pyssect',
     parent: 'colejcummins',
     tech: 'Python / React / Nodejs',
-    children: ['pyssect/repo', 'pyssect/README.md'],
+    children: ['pyssect/repo', 'pyssect/README.md']
   },
   'pyssect/repo': {
     id: 'pyssect/repo',
@@ -66,7 +66,7 @@ export const fs: Record<string, FsObject> = {
     name: 'minilang-compiler',
     parent: 'colejcummins',
     tech: 'Java / Clang',
-    children: ['minilang-compiler/repo', 'minilang-compiler/README.md'],
+    children: ['minilang-compiler/repo', 'minilang-compiler/README.md']
   },
   'minilang-compiler/repo': {
     id: 'minilang-compiler/repo',
@@ -108,7 +108,7 @@ export const fs: Record<string, FsObject> = {
     name: 'react-search-modal',
     tech: 'React / Elasticsearch',
     parent: 'colejcummins',
-    children: [],
+    children: []
   },
   'image-to-ascii': {
     id: 'image-to-ascii',
@@ -143,7 +143,7 @@ export const fs: Record<string, FsObject> = {
     name: 'repo',
     parent: 'learn-crypto',
     tech: 'Python / Cryptography',
-    link: 'https://github.com/colejcummins/learn-crypto',
+    link: 'https://github.com/colejcummins/learn-crypto'
   },
   'learn-crypto/README.md': {
     id: 'learn-crypto/README.md',
@@ -161,26 +161,31 @@ export const outputPwd = (cur: string) => {
     outputList.unshift(cur);
   }
   return outputList.join('/');
-}
+};
 
 export const getCur = (cur: string): FsObject => {
   return fs[cur];
-}
+};
 
 export const getChildren = (cur: string): FsObject[] => {
-  return fs[cur].children?.map((child) => fs[child]) ?? []
-}
+  return fs[cur].children?.map((child) => fs[child]) ?? [];
+};
 
 export const getValidCdTargets = (cur: string): string[] => {
   const defaults = ['colejcummins', '..', '.'];
-  return [...defaults, ...getChildren(cur).filter((node) => node.children).map((node) => node.name)];
-}
+  return [
+    ...defaults,
+    ...getChildren(cur)
+      .filter((node) => node.children)
+      .map((node) => node.name)
+  ];
+};
 
 export const getParent = (cur: string): FsObject => {
   return fs[fs[cur].parent];
-}
+};
 
 export const getPermissions = (cur: string) => {
   const execFlag = fs[cur].children ? 'x' : '-';
   return `${fs[cur].children ? 'd' : '-'}rw${execFlag}r-${execFlag}r-${execFlag}@`;
-}
+};

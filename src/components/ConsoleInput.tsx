@@ -35,11 +35,11 @@ export const ConsoleInput = observer(() => {
       clearIndex();
     } else if (evt.key === 'ArrowUp' && consoleHistory && historyIndex < consoleHistory.length) {
       changeIndex(1);
-      const {text} = consoleHistory[consoleHistory.length - historyIndex - 1];
+      const { text } = consoleHistory[consoleHistory.length - historyIndex - 1];
       setInputValue(text);
     } else if (evt.key === 'ArrowDown' && consoleHistory && historyIndex > 0) {
       changeIndex(-1);
-      const {text} = historyIndex > 1 ? consoleHistory[consoleHistory.length - historyIndex + 1] : {text: ''};
+      const { text } = historyIndex > 1 ? consoleHistory[consoleHistory.length - historyIndex + 1] : { text: '' };
       setInputValue(text);
     } else if (evt.key === 'ArrowRight' && auto) {
       setInputValue(auto);

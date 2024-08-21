@@ -20,7 +20,7 @@ export class AppStore {
       addHistory: action.bound,
       changeIndex: action.bound,
       setLightMode: action.bound,
-      goToNode: action.bound,
+      goToNode: action.bound
     });
   }
 
@@ -41,7 +41,7 @@ export class AppStore {
   }
 
   addHistory(text: string, validation: string, location: string) {
-    this.consoleHistory.push({text, validation, location});
+    this.consoleHistory.push({ text, validation, location });
   }
 
   changeIndex(num: number) {
@@ -49,6 +49,6 @@ export class AppStore {
   }
 
   setLightMode(lightMode: boolean) {
-    this.lightMode = lightMode
+    this.lightMode = lightMode;
   }
 }

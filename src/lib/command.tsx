@@ -59,18 +59,16 @@ const renderLsContent = (args: string[], location: string) => {
     return (
       <div className="flex flex-col">
         {children.map((child) => (
-          <div>
-            {getPermissions(child.id)}
-          </div>
+          <div>{getPermissions(child.id)}</div>
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-y-2 gap-x-2 w-full py-4" style={{gridTemplateColumns: "repeat(4, minmax(240px, 1fr))"}}>
+    <div className="grid gap-y-2 gap-x-2 w-full py-4" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
-        <Link key={child.id} href={""} >
+        <Link key={child.id} href={''}>
           {child.name}
         </Link>
       ))}
@@ -149,7 +147,7 @@ export const commands: Record<string, Command> = {
     },
     validate: (args: string[], store: AppStore) => {
       if (args.length > 0 && !store.validCdTargets.includes(args[0])) {
-        return `${args[0]} is not a valid argument. Valid arguments:\n${store.validCdTargets.join(' ')}`
+        return `${args[0]} is not a valid argument. Valid arguments:\n${store.validCdTargets.join(' ')}`;
       }
       return '';
     },
@@ -161,7 +159,7 @@ export const commands: Record<string, Command> = {
       } else if (args[0] === '.') {
         return;
       } else {
-        store.goToNode(args[0])
+        store.goToNode(args[0]);
       }
     }
   },
@@ -173,21 +171,21 @@ export const commands: Record<string, Command> = {
   },
   mode: {
     autocomplete: (args: string[]) => {
-      return args.length > 0 ? ['light', 'dark'].find((mode) => mode.startsWith(args[0])): ''
+      return args.length > 0 ? ['light', 'dark'].find((mode) => mode.startsWith(args[0])) : '';
     },
     validate: (args: string[]) => {
       if (args.length && !['light', 'dark'].includes(args[0])) {
-        return `${args} is not a valid argument\nValid arguments: light, dark`
+        return `${args} is not a valid argument\nValid arguments: light, dark`;
       }
-      return ''
+      return '';
     },
     execute: (args: string[], store: AppStore) => {
-      store.setLightMode(args.length > 0 ? args[0] === 'light' : !store.lightMode)
+      store.setLightMode(args.length > 0 ? args[0] === 'light' : !store.lightMode);
     }
   },
   pwd: {
     render: (_, location: string) => {
-      return <>{outputPwd(location)}</>
+      return <>{outputPwd(location)}</>;
     }
   }
 };

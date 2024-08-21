@@ -16,7 +16,7 @@ import { getCur } from '@/lib/fs';
  * light mode
  */
 
-const Command = memo(({text, validation, location}: HistoryItem ) => {
+const Command = memo(({ text, validation, location }: HistoryItem) => {
   return (
     <div className="border-t border-slate-200 dark:border-slate-800 py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
       <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-600">
@@ -44,7 +44,9 @@ export const Console = observer(() => {
     <div className="flex flex-col h-[700px]">
       <div className="flex flex-col overflow-hidden flex-1 justify-end">
         <div className="flex flex-col overflow-scroll" ref={scrollRef}>
-          {consoleHistory.map((item, i) => <Command {...item}/>)}
+          {consoleHistory.map((item, i) => (
+            <Command {...item} />
+          ))}
         </div>
       </div>
       <div className="justify-self-end">
