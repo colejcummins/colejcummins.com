@@ -5,8 +5,7 @@ import { observer } from 'mobx-react-lite';
 
 import { useAppStore, HistoryItem } from '@/store';
 import { ConsoleInput } from '@/components/ConsoleInput';
-import { render, validate } from '@/lib/command';
-import { getCur } from '@/lib/fs';
+import { render } from '@/lib/command';
 
 /**
  * TODO
@@ -28,6 +27,7 @@ const Command = memo(({ text, validation, location }: HistoryItem) => {
     </div>
   );
 });
+Command.displayName = 'Command';
 
 export const Console = observer(() => {
   const store = useAppStore();
@@ -45,7 +45,7 @@ export const Console = observer(() => {
       <div className="flex flex-col overflow-hidden flex-1 justify-end">
         <div className="flex flex-col overflow-scroll" ref={scrollRef}>
           {consoleHistory.map((item, i) => (
-            <Command {...item} />
+            <Command {...item} key={i} />
           ))}
         </div>
       </div>

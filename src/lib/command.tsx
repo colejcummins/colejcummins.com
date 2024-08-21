@@ -59,7 +59,7 @@ const renderLsContent = (args: string[], location: string) => {
     return (
       <div className="flex flex-col">
         {children.map((child) => (
-          <div>{getPermissions(child.id)}</div>
+          <div key={child.id}>{getPermissions(child.id)}</div>
         ))}
       </div>
     );

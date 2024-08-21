@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Console } from '@/components/Console';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Background } from '@/components/Background';
+// import { Background } from '@/components/Background';
 
 export default function Home() {
   return (
