@@ -59,7 +59,7 @@ const renderLsContent = (args: string[], location: string) => {
     return (
       <div className="flex flex-col gap-1">
         {children.map((child) => (
-          <Link href="">
+          <Link key={child.id} href="">
             <div className="flex gap-4" key={child.id}>
               <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
               <div>colejcummins</div>
