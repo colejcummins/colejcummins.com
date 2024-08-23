@@ -57,16 +57,24 @@ const renderLsContent = (args: string[], location: string) => {
 
   if (args[0] === '-l') {
     return (
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-1">
         {children.map((child) => (
-          <div key={child.id}>{getPermissions(child.id)}</div>
+          <Link href="">
+            <div className="flex gap-4" key={child.id}>
+              <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
+              <div>colejcummins</div>
+              <div className="w-[20px]">{child.children?.length ?? 0}</div>
+              <div className="whitespace-nowrap w-[225px]">{child.tech || ''}</div>
+              <div>{child.name}</div>
+            </div>
+          </Link>
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-y-2 gap-x-2 w-full py-4" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
+    <div className="grid gap-y-1 gap-x-2 w-full py-4" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
         <Link key={child.id} href={''}>
           {child.name}

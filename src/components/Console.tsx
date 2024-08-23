@@ -17,13 +17,13 @@ import { render } from '@/lib/command';
 
 const Command = memo(({ text, validation, location }: HistoryItem) => {
   return (
-    <div className="border-t border-slate-200 dark:border-slate-800 py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
-      <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-600">
+    <div className="border-t border-slate-200 dark:border-slate-700 py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
+      <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-500">
         {location} &gt;
         <div className="font-normal">{text}</div>
       </div>
       {!validation && render(text, location)}
-      {validation && <div className="text-slate-400 dark:text-slate-600 font-mono">{validation}</div>}
+      {validation && <div className="text-slate-400 dark:text-slate-500 font-mono">{validation}</div>}
     </div>
   );
 });
