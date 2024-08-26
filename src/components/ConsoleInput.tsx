@@ -47,7 +47,7 @@ export const ConsoleInput = observer(() => {
   };
 
   return (
-    <div className="flex gap-2 px-5 py-5 border-t border-slate-300 dark:border-slate-700">
+    <div className="flex gap-2 px-5 py-5">
       <label className="font-mono font-semibold text-blue-600 dark:text-blue-500" htmlFor="terminal">
         {getCur(currentNode).name} &gt;
       </label>
@@ -67,9 +67,9 @@ export const ConsoleInput = observer(() => {
         />
         {inputFocused && (
           <div
-            className="absolute h-6 w-0.5 bg-blue-600 dark:bg-blue-500 rounded-full animate-blink"
+            className="absolute h-6 w-1 bg-blue-600 dark:bg-blue-500 rounded-full animate-blink z-20"
             style={{
-              left: `calc(${inputValue.length} * 0.602rem)`
+              left: `calc(${Math.min(inputValue.length, 130)} * 0.602rem)`
             }}
           />
         )}

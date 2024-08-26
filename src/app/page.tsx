@@ -11,14 +11,7 @@ export default function Home() {
     <ThemeProvider>
       <div className="relative flex justify-center items-center w-screen h-screen bg-white dark:bg-black">
         <Background />
-        <div className="flex flex-col rounded-lg w-4/5 bg-slate-100/50 dark:bg-slate-900/75 border border-slate-300 dark:border-slate-600 backdrop-blur-lg z-10">
-          <div className="flex gap-2 justify-start p-2 border-b border-slate-300 dark:border-slate-700">
-            {Array(3)
-              .fill(0)
-              .map((i) => (
-                <div key={i} className="rounded-full h-4 w-4 border border-slate-300 dark:border-slate-700" />
-              ))}
-          </div>
+        <div className="flex flex-col rounded-lg w-4/5 bg-slate-200/50 dark:bg-slate-900/75 backdrop-blur-lg z-10">
           <Console />
         </div>
       </div>
@@ -31,14 +24,14 @@ export default function Home() {
 export default function Home() {
   return (
     <ThemeProvider>
-      <div className="relative flex justify-center items-center w-screen h-screen bg-transparent">
+      <div className="relative flex justify-center items-center w-screen h-screen bg-white dark:bg-black">
         <Background />
-        <div className="flex flex-col rounded-lg w-4/5 bg-slate-100 dark:bg-slate-950 border border-slate-300 dark:border-slate-700">
-          <div className="flex gap-2 justify-start p-2 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col rounded-lg w-4/5 bg-slate-100/50 dark:bg-slate-900/75 border border-slate-300 dark:border-slate-600 backdrop-blur-lg z-10">
+          <div className="flex gap-2 justify-start p-2 border-b border-slate-300 dark:border-slate-700">
             {Array(3)
               .fill(0)
               .map((i) => (
-                <div key={i} className="rounded-full h-4 w-4 border border-slate-200 dark:border-slate-800" />
+                <div key={i} className="rounded-full h-4 w-4 border border-slate-300 dark:border-slate-700" />
               ))}
           </div>
           <Console />

@@ -17,8 +17,8 @@ import { render } from '@/lib/command';
 
 const Command = memo(({ text, validation, location }: HistoryItem) => {
   return (
-    <div className="border-t border-slate-300 dark:border-slate-700 py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
-      <div className="flex gap-2 font-semibold text-slate-400 dark:text-slate-500">
+    <div className="py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
+      <div className="py-1 flex gap-2 font-semibold text-slate-400 dark:text-slate-500">
         {location} &gt;
         <div className="font-normal">{text}</div>
       </div>

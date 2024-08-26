@@ -74,7 +74,7 @@ const renderLsContent = (args: string[], location: string) => {
   }
 
   return (
-    <div className="grid gap-y-1 gap-x-2 w-full py-4" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
+    <div className="grid gap-y-1 gap-x-2 w-full" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
         <Link key={child.id} href={''}>
           {child.name}
