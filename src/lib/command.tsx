@@ -30,7 +30,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
 
   const MaybeLink = ({ child, children }: { child: FsObject; children: React.ReactNode }) => {
     return child.link ? (
-      <a href={child.link} target="_blank">
+      <a href={child.link} rel="noreferrer" target="_blank">
         {children}
       </a>
     ) : (
