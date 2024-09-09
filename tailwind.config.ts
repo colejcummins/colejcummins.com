@@ -15,7 +15,7 @@ const config: Config = {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       },
       animation: {
-        blink: 'blink 1.25s cubic-bezier(1, 0.1, 0.1, 1) infinite'
+        blink: 'blink 1.25s cubic-bezier(1, 0.1, 0.1, 1) infinite',
       },
       keyframes: {
         blink: {

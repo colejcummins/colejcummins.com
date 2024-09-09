@@ -1,28 +1,21 @@
 'use client';
 
-import React, { useRef, useEffect, memo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAppStore, HistoryItem } from '@/store';
 import { ConsoleInput } from '@/components/ConsoleInput';
 import { render } from '@/lib/command';
 
-/**
- * TODO
- * Fix scrolling behavior for text box
- *
- * TODO Future
- * light mode
- */
-
-const Command = memo(({ text, validation, location }: HistoryItem) => {
+const Command = observer(({ text, validation, location }: HistoryItem) => {
+  const store = useAppStore();
   return (
-    <div className="py-5 px-5 font-mono text-slate-950 dark:text-slate-50">
+    <div className="py-5 px-5 font-mono text-slate-950 dark:text-slate-50 border-t border-slate-400/50 dark:border-slate-700/75">
       <div className="py-1 flex gap-2 font-semibold text-slate-400 dark:text-slate-500">
         {location} &gt;
         <div className="font-normal">{text}</div>
       </div>
-      {!validation && render(text, location)}
+      {!validation && render(text, location, store)}
       {validation && <div className="text-slate-400 dark:text-slate-500 font-mono">{validation}</div>}
     </div>
   );

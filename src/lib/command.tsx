@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import React from 'react';
 
-import Link from '@/components/Link';
+import ActiveText from '@/components/ActiveText';
 import { AppStore } from '@/store';
-import { getChildren, ROOTNAME, getParent, outputPwd, getPermissions } from '@/lib/fs';
+import { getChildren, ROOTNAME, getParent, outputPwd, getPermissions, FsObject } from '@/lib/fs';
 
 interface Command {
-  render?: (args: string[], location: string) => React.JSX.Element;
+  render?: (args: string[], location: string, store: AppStore) => React.JSX.Element;
   autocomplete?: (args: string[], store: AppStore) => string | undefined;
   validate?: (args: string[], store: AppStore) => string | undefined;
   execute?: (args: string[], store: AppStore) => void;
@@ -25,49 +25,35 @@ export const commandMan: Record<string, string> = {
   cd: 'Changes current directory. Usage:\ncd [ . | .. | directory_name ]'
 };
 
-export const lsContent = [
-  {
-    name: 'pyssect',
-    description: 'Python control flow graph and AST visualizer',
-    tech: 'Python / React / Express',
-    link: 'https://github.com/colejcummins/pyssect'
-  },
-  {
-    name: 'minilang-compiler',
-    description: 'A minilang toy compiler writen in Java',
-    tech: 'Java / Clang',
-    link: 'https://github.com/colejcummins/minilang-compiler'
-  },
-  {
-    name: 'llvm-syntax-highlighting',
-    description: 'LLVM parser and syntax highlighter written for VSCode',
-    tech: 'LLVM / JSON',
-    link: 'https://github.com/colejcummins/llvm-syntax-highlighting'
-  },
-  {
-    name: 'react-search-modal',
-    description: 'An opinionated search component inspired by cmdk and Github',
-    tech: 'React / Elasticsearch',
-    link: ''
-  }
-];
-
-const renderLsContent = (args: string[], location: string) => {
+const renderLsContent = (args: string[], location: string, store: AppStore) => {
   const children = getChildren(location);
+
+  const MaybeLink = ({child, children}: {child: FsObject, children: React.ReactNode}) => {
+    return child.link ? <a href={child.link} target="_blank">{children}</a> : children;
+  }
+
+  const handleOnClick = (child: FsObject) => {
+    return !child.link ? () => {
+      store.addHistory(`cd ${child.name}`, '', location);
+      store.goToNode(child.id);
+    } : () => {};
+  }
 
   if (args[0] === '-l') {
     return (
       <div className="flex flex-col gap-1">
         {children.map((child) => (
-          <Link key={child.id} href="">
-            <div className="flex gap-4" key={child.id}>
-              <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
-              <div>colejcummins</div>
-              <div className="w-[20px]">{child.children?.length ?? 0}</div>
-              <div className="whitespace-nowrap w-[225px]">{child.tech || ''}</div>
-              <div>{child.name}</div>
-            </div>
-          </Link>
+          <ActiveText key={child.id} onClick={handleOnClick(child)}>
+            <MaybeLink child={child}>
+              <div className="flex gap-4" key={child.id}>
+                <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
+                <div>colejcummins</div>
+                <div className="w-[20px]">{child.children?.length ?? 0}</div>
+                <div className="justify-start whitespace-nowrap w-[225px]">{child.tech || ''}</div>
+                <div>{child.name}</div>
+              </div>
+            </MaybeLink>
+          </ActiveText>
         ))}
       </div>
     );
@@ -76,9 +62,11 @@ const renderLsContent = (args: string[], location: string) => {
   return (
     <div className="grid gap-y-1 gap-x-2 w-full" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
-        <Link key={child.id} href={''}>
-          {child.name}
-        </Link>
+        <ActiveText key={child.id} onClick={handleOnClick(child)}>
+          <MaybeLink child={child}>
+            {child.name}
+          </MaybeLink>
+        </ActiveText>
       ))}
     </div>
   );
@@ -87,10 +75,10 @@ const renderLsContent = (args: string[], location: string) => {
 const renderWhoAmIContent = () => {
   return (
     <div className="flex flex-1 flex-col justify-center py-5">
-      <Link href="https://github.com/colejcummins">
+      <ActiveText>
         <div className="flex items-center gap-5">
           <Image
-            className="rounded-full"
+            className="rounded-md"
             src="/profilepic.png"
             alt="Colejcummins Profile Picture"
             width={70}
@@ -101,7 +89,7 @@ const renderWhoAmIContent = () => {
             <div>React / Typescript / Nodejs / Nextjs / Python / ThreeJS</div>
           </div>
         </div>
-      </Link>
+      </ActiveText>
     </div>
   );
 };
@@ -145,9 +133,6 @@ export const commands: Record<string, Command> = {
       }
       return '';
     },
-    execute: (args: string[]) => {
-      window.open(lsContent.find((f) => f.name === args[0])?.link);
-    }
   },
   cd: {
     autocomplete: (args: string[], store: AppStore) => {
@@ -225,11 +210,11 @@ export const validate = (input: string, store: AppStore) => {
   }
 };
 
-export const render = (input: string, location: string) => {
+export const render = (input: string, location: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (command in commands) {
-    return commands[command].render?.(args, location);
+    return commands[command].render?.(args, location, store);
   }
 };
 
