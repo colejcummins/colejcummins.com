@@ -17,7 +17,7 @@ export default function Home() {
               .fill(0)
               .map((i) => (
                 <div key={i} className="rounded-full h-4 w-4 border border-slate-400/50 dark:border-slate-700/75" />
-            ))}
+              ))}
           </div>
           <Console />
         </div>

@@ -28,16 +28,24 @@ export const commandMan: Record<string, string> = {
 const renderLsContent = (args: string[], location: string, store: AppStore) => {
   const children = getChildren(location);
 
-  const MaybeLink = ({child, children}: {child: FsObject, children: React.ReactNode}) => {
-    return child.link ? <a href={child.link} target="_blank">{children}</a> : children;
-  }
+  const MaybeLink = ({ child, children }: { child: FsObject; children: React.ReactNode }) => {
+    return child.link ? (
+      <a href={child.link} target="_blank">
+        {children}
+      </a>
+    ) : (
+      children
+    );
+  };
 
   const handleOnClick = (child: FsObject) => {
-    return !child.link ? () => {
-      store.addHistory(`cd ${child.name}`, '', location);
-      store.goToNode(child.id);
-    } : () => {};
-  }
+    return !child.link
+      ? () => {
+          store.addHistory(`cd ${child.name}`, '', location);
+          store.goToNode(child.id);
+        }
+      : () => {};
+  };
 
   if (args[0] === '-l') {
     return (
@@ -63,9 +71,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
     <div className="grid gap-y-1 gap-x-2 w-full" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
         <ActiveText key={child.id} onClick={handleOnClick(child)}>
-          <MaybeLink child={child}>
-            {child.name}
-          </MaybeLink>
+          <MaybeLink child={child}>{child.name}</MaybeLink>
         </ActiveText>
       ))}
     </div>
@@ -132,7 +138,7 @@ export const commands: Record<string, Command> = {
         return `${args} is not a valid argument. Valid arguments:\n${validDirs.join(' ')}`;
       }
       return '';
-    },
+    }
   },
   cd: {
     autocomplete: (args: string[], store: AppStore) => {
