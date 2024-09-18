@@ -26,7 +26,6 @@ const _ConsoleInput = observer(() => {
   }, [historyIndex, inputValue]);
 
   const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
-
     // For removing the blinking animation while we are typing
     animationRef?.current?.classList.remove('animate-blink');
     void animationRef?.current?.offsetWidth;
@@ -86,5 +85,5 @@ const _ConsoleInput = observer(() => {
   );
 });
 
-_ConsoleInput.displayName = 'ConsoleInput'
-export {_ConsoleInput as ConsoleInput};
+_ConsoleInput.displayName = 'ConsoleInput';
+export { _ConsoleInput as ConsoleInput };

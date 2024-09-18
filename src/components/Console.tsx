@@ -36,7 +36,11 @@ export const Console = observer(() => {
   return (
     <div className="flex flex-col h-[700px]">
       <div className="flex flex-col overflow-hidden flex-1 justify-end">
-        <div className="flex flex-col overflow-y-scrol overflow-x-hidden" style={{scrollbarColor: 'none'}} ref={scrollRef}>
+        <div
+          className="flex flex-col overflow-y-scrol overflow-x-hidden"
+          style={{ scrollbarColor: 'none' }}
+          ref={scrollRef}
+        >
           {consoleHistory.map((item, i) => (
             <Command {...item} key={i} />
           ))}

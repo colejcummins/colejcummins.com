@@ -1,11 +1,8 @@
 import React from 'react';
 
 export const Background = () => {
-  return (
-    <div className="absolute w-screen h-screen">
-    </div>
-  );
-}
+  return <div className="absolute w-screen h-screen"></div>;
+};
 
 /**
 export const Background = () => {
