@@ -29,8 +29,8 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   const children = getChildren(location);
 
   const MaybeLink = ({ child, children }: { child: FsObject; children: React.ReactNode }) => {
-    return child.link ? (
-      <a href={child.link} rel="noreferrer" target="_blank">
+    return child.link || child.download ? (
+      <a href={child.link || child.download} rel="noreferrer" target="_blank" download={!!child.download}>
         {children}
       </a>
     ) : (
@@ -39,7 +39,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   };
 
   const handleOnClick = (child: FsObject) => {
-    return !child.link
+    return !child.link && !child.download
       ? () => {
           store.addHistory(`cd ${child.name}`, '', location);
           store.goToNode(child.id);
@@ -57,7 +57,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
                 <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
                 <div>colejcummins</div>
                 <div className="w-[20px]">{child.children?.length ?? 0}</div>
-                <div className="justify-start whitespace-nowrap w-[225px]">{child.tech || ''}</div>
+                <div className="flex whitespace-nowrap w-[225px]">{child.tech || ''}</div>
                 <div>{child.name}</div>
               </div>
             </MaybeLink>
@@ -101,9 +101,19 @@ const renderWhoAmIContent = () => {
 };
 
 const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode', 'cd', 'pwd'];
+const validlsArgs = ['-l'];
 const validDirs = ['pyssect', 'minilang-compiler', 'asciizer', 'react-select'];
 export const commands: Record<string, Command> = {
   ls: {
+    autocomplete: (args: string[]) => {
+      return validlsArgs.find((man) => man.startsWith(args[0]));
+    },
+    validate: (args: string[]) => {
+      if (!validlsArgs.includes(args[0])) {
+        return `${args} is not a valid argument. Valid arguments:\n${validlsArgs.join(' ')}`;
+      }
+      return '';
+    },
     render: renderLsContent
   },
   whoami: {
@@ -193,11 +203,11 @@ export const autocomplete = (input: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!args.length) {
-    return validCommands.sort((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) || '';
+    return validCommands.sort((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) ?? '';
   }
 
   if (command in commands && args.length) {
-    const complete = commands[command].autocomplete?.(args, store) || '';
+    const complete = commands[command].autocomplete?.(args, store) ?? '';
     return input.replace(new RegExp(args[0] + '$'), complete);
   }
 

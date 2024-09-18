@@ -29,8 +29,14 @@ a:focus {
   border-radius: 0.25rem;
 }
 
+html {
+  background-color: black;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
+  background-image: radial-gradient(theme('colors.slate.900') 1px, transparent 0);
+  background-size: 20px 20px;
 }
 
 iframe {

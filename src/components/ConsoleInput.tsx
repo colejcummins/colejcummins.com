@@ -7,12 +7,13 @@ import { useAppStore } from '@/store';
 import { autocomplete, execute, validate } from '@/lib/command';
 import { getCur } from '@/lib/fs';
 
-export const ConsoleInput = observer(() => {
+const _ConsoleInput = observer(() => {
   const store = useAppStore();
   const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex, currentNode } = store;
   const [inputValue, setInputValue] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const animationRef = useRef<HTMLDivElement>(null);
 
   const auto = autocomplete(inputValue, store);
 
@@ -25,6 +26,12 @@ export const ConsoleInput = observer(() => {
   }, [historyIndex, inputValue]);
 
   const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
+
+    // For removing the blinking animation while we are typing
+    animationRef?.current?.classList.remove('animate-blink');
+    void animationRef?.current?.offsetWidth;
+    animationRef?.current?.classList.add('animate-blink');
+
     if (evt.key === 'Enter' && inputValue !== '') {
       const validation = validate(inputValue, store) || '';
       addHistory(inputValue, validation, getCur(currentNode).name);
@@ -67,9 +74,10 @@ export const ConsoleInput = observer(() => {
         />
         {inputFocused && (
           <div
+            ref={animationRef}
             className="absolute h-6 w-1 bg-blue-600 dark:bg-blue-500 rounded-full animate-blink z-20"
             style={{
-              left: `calc(${Math.min(inputValue.length, 130)} * 0.602rem)`
+              left: Math.min(inputValue.length * 9.632, inputRef?.current?.offsetWidth ?? 2000)
             }}
           />
         )}
@@ -77,3 +85,6 @@ export const ConsoleInput = observer(() => {
     </div>
   );
 });
+
+_ConsoleInput.displayName = 'ConsoleInput'
+export {_ConsoleInput as ConsoleInput};

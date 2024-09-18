@@ -1,4 +1,4 @@
-import { makeAutoObservable, action } from 'mobx';
+import { makeAutoObservable, action, computed } from 'mobx';
 import { getValidCdTargets, ROOTNAME } from '@/lib/fs';
 
 export interface HistoryItem {
@@ -15,6 +15,7 @@ export class AppStore {
 
   constructor() {
     makeAutoObservable(this, {
+      validCdTargets: computed,
       clearIndex: action.bound,
       clearHistory: action.bound,
       addHistory: action.bound,
@@ -25,6 +26,7 @@ export class AppStore {
   }
 
   get validCdTargets(): string[] {
+    console.log(getValidCdTargets(this.currentNode));
     return getValidCdTargets(this.currentNode);
   }
 
