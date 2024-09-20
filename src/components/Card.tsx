@@ -3,7 +3,7 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { throttle } from 'throttle-debounce';
 
-export const Card = ({ children }: { children: JSX.Element }) => {
+export const Card = ({ children }: { children: React.JSX.Element }) => {
   const [angle, setAngle] = useState(180);
   const ref = useRef<HTMLDivElement>(null);
 

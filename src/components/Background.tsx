@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { useAnimationStore, useAppStore } from '@/store';
 
-export const Background = observer(({ children }: { children: JSX.Element }) => {
+export const Background = observer(({ children }: { children: React.JSX.Element }) => {
   const { mousePos, setMousePos } = useAnimationStore();
   const { lightMode } = useAppStore();
 
