@@ -51,7 +51,12 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
     return (
       <div className="flex flex-col gap-1">
         {children.map((child) => (
-          <ActiveText key={child.id} onClick={handleOnClick(child)} link={child.link || child.download} download={!!child.download}>
+          <ActiveText
+            key={child.id}
+            onClick={handleOnClick(child)}
+            link={child.link || child.download}
+            download={!!child.download}
+          >
             <div className="flex gap-4" key={child.id}>
               <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
               <div>colejcummins</div>
@@ -68,7 +73,12 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   return (
     <div className="grid gap-y-1 gap-x-2 w-full" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
-        <ActiveText key={child.id} onClick={handleOnClick(child)} link={child.link || child.download} download={!!child.download}>
+        <ActiveText
+          key={child.id}
+          onClick={handleOnClick(child)}
+          link={child.link || child.download}
+          download={!!child.download}
+        >
           {child.name}
         </ActiveText>
       ))}

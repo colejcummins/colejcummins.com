@@ -1,16 +1,19 @@
-import React, {useState, useCallback} from 'react';
-import {throttle} from 'throttle-debounce';
+import React, { useState, useCallback } from 'react';
+import { throttle } from 'throttle-debounce';
 import { observer } from 'mobx-react-lite';
 
 import { useAnimationStore, useAppStore } from '@/store';
 
-export const Background = observer(({children}: {children: JSX.Element}) => {
-  const {mousePos, setMousePos} = useAnimationStore();
+export const Background = observer(({ children }: { children: JSX.Element }) => {
+  const { mousePos, setMousePos } = useAnimationStore();
   const { lightMode } = useAppStore();
 
-  const handleMouseMove = useCallback(throttle(50, (e: React.MouseEvent) => {
-    setMousePos({x: e.clientX, y: e.clientY});
-  }), []);
+  const handleMouseMove = useCallback(
+    throttle(50, (e: React.MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    }),
+    []
+  );
 
   const gradientCol = lightMode ? '#fffffff9' : '#000000df';
 
