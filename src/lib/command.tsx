@@ -51,16 +51,14 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
     return (
       <div className="flex flex-col gap-1">
         {children.map((child) => (
-          <ActiveText key={child.id} onClick={handleOnClick(child)}>
-            <MaybeLink child={child}>
-              <div className="flex gap-4" key={child.id}>
-                <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
-                <div>colejcummins</div>
-                <div className="w-[20px]">{child.children?.length ?? 0}</div>
-                <div className="flex whitespace-nowrap w-[225px]">{child.tech || ''}</div>
-                <div>{child.name}</div>
-              </div>
-            </MaybeLink>
+          <ActiveText key={child.id} onClick={handleOnClick(child)} link={child.link || child.download} download={!!child.download}>
+            <div className="flex gap-4" key={child.id}>
+              <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
+              <div>colejcummins</div>
+              <div className="w-[20px]">{child.children?.length ?? 0}</div>
+              <div className="flex whitespace-nowrap w-[225px]">{child.tech || ''}</div>
+              <div>{child.name}</div>
+            </div>
           </ActiveText>
         ))}
       </div>
@@ -70,8 +68,8 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   return (
     <div className="grid gap-y-1 gap-x-2 w-full" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))' }}>
       {children.map((child) => (
-        <ActiveText key={child.id} onClick={handleOnClick(child)}>
-          <MaybeLink child={child}>{child.name}</MaybeLink>
+        <ActiveText key={child.id} onClick={handleOnClick(child)} link={child.link || child.download} download={!!child.download}>
+          {child.name}
         </ActiveText>
       ))}
     </div>

@@ -53,8 +53,8 @@ const _ConsoleInput = observer(() => {
   };
 
   return (
-    <div className="flex gap-2 px-5 py-5 border-t border-slate-400/50 dark:border-slate-700/75">
-      <label className="font-mono font-semibold text-blue-600 dark:text-blue-500" htmlFor="terminal">
+    <div className="flex gap-2 px-5 py-5 border-t border-slate-200 dark:border-slate-800">
+      <label className="font-mono font-semibold text-blue-600 dark:text-blue-500 shrink-0" htmlFor="terminal">
         {getCur(currentNode).name} &gt;
       </label>
       <div className="relative flex flex-1">

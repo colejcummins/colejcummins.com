@@ -13,6 +13,7 @@
     "@primer/octicons-react": "^19.8.0",
     "@react-three/fiber": "^8.16.8",
     "@types/three": "^0.167.1",
+    "@types/throttle-debounce": "^5.0.2",
     "clsx": "^2.1.0",
     "eslint-plugin-react": "^7.35.0",
     "mobx": "^6.13.1",
@@ -21,7 +22,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hotkeys-hook": "^4.4.1",
-    "three": "^0.167.0"
+    "three": "^0.167.0",
+    "throttle-debounce": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^20",
