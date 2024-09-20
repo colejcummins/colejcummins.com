@@ -22,7 +22,8 @@ export const commandMan: Record<string, string> = {
   clear: 'Clears console and command history. Usage:\nclear',
   mode: 'Changes the current color mode. Usage:\nmode [ light | dark ]',
   pwd: 'Displays the current working directory. Usage:\npwd',
-  cd: 'Changes current directory. Usage:\ncd [ . | .. | directory_name ]'
+  cd: 'Changes current directory. Usage:\ncd [ . | .. | directory_name ]',
+  echo: 'Displays a line of text. Usage:\necho [text]'
 };
 
 const renderLsContent = (args: string[], location: string, store: AppStore) => {
@@ -108,7 +109,11 @@ const renderWhoAmIContent = () => {
   );
 };
 
-const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode', 'cd', 'pwd'];
+const renderEchoContent = (args: string[]) => {
+  return <>{args.join(' ')}</>;
+};
+
+const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode', 'cd', 'pwd', 'echo'];
 const validlsArgs = ['-l'];
 const validDirs = ['pyssect', 'minilang-compiler', 'asciizer', 'react-select'];
 export const commands: Record<string, Command> = {
@@ -203,6 +208,12 @@ export const commands: Record<string, Command> = {
   pwd: {
     render: (_, location: string) => {
       return <>{outputPwd(location)}</>;
+    }
+  },
+  echo: {
+    render: renderEchoContent,
+    validate: () => {
+      return '';
     }
   }
 };
