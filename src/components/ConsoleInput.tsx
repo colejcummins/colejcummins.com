@@ -54,7 +54,7 @@ const _ConsoleInput = observer(() => {
 
   return (
     <div className="flex gap-2 px-5 py-5 border-t border-slate-200 dark:border-slate-800">
-      <label className="font-mono font-semibold text-blue-600 dark:text-blue-400 shrink-0" htmlFor="terminal">
+      <label className="font-mono font-semibold text-blue-700 dark:text-blue-400 shrink-0" htmlFor="terminal">
         {getCur(currentNode).name} &gt;
       </label>
       <div className="relative flex flex-1">
@@ -75,7 +75,7 @@ const _ConsoleInput = observer(() => {
         {inputFocused && (
           <div
             ref={animationRef}
-            className="absolute h-6 w-1 bg-blue-600 dark:bg-blue-400 rounded-full animate-blink z-20"
+            className="absolute h-6 w-1 bg-blue-700 dark:bg-blue-400 rounded-full animate-blink z-20"
             style={{
               left: Math.min(inputValue.length * 9.632, inputRef?.current?.offsetWidth ?? 2000)
             }}

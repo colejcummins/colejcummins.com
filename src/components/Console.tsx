@@ -11,12 +11,12 @@ const Command = observer(({ text, validation, location }: HistoryItem) => {
   const store = useAppStore();
   return (
     <div className="py-5 px-5 font-mono text-slate-950 dark:text-slate-50 border-t border-slate-200 dark:border-slate-800">
-      <div className="py-1 flex gap-2 font-semibold text-slate-300 dark:text-slate-800">
+      <div className="py-1 flex gap-2 font-semibold text-slate-300 dark:text-slate-700">
         {location} &gt;
         <div className="font-normal">{text}</div>
       </div>
       {!validation && render(text, location, store)}
-      {validation && <div className="text-slate-400 dark:text-slate-500 font-mono">{validation}</div>}
+      {validation && <div className="text-slate-400 dark:text-slate-400 font-mono">{validation}</div>}
     </div>
   );
 });

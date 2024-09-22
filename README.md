@@ -11,4 +11,3 @@ colejcummins Personal Website
 * Improve contrast for light and dark colors
 * Improve man
 * Make responsive
-* Remove auto capitalization

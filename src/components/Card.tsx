@@ -25,7 +25,7 @@ export const Card = ({ children }: { children: React.JSX.Element }) => {
     <div
       ref={ref}
       onMouseMove={handleMouseMove}
-      className="rounded-lg p-[1px] w-4/5 from-slate-300 to-slate-200 dark:from-slate-500 from-5% dark:via-slate-600 via-10% dark:to-slate-900 to-70%"
+      className="rounded-lg p-[1px] w-4/5 from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-10% dark:to-slate-900 to-70%"
       style={{
         backgroundImage: `linear-gradient(${angle}deg, var(--tw-gradient-stops))`
       }}

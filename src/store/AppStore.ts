@@ -7,8 +7,13 @@ export interface HistoryItem {
   location: string;
 }
 
+const defaultHistory: HistoryItem[] = [
+  {text: 'whoami', validation: '', location: 'colejcummins'},
+  {text: 'ls -l', validation: '', location: 'colejcummins'},
+];
+
 export class AppStore {
-  consoleHistory: HistoryItem[] = [];
+  consoleHistory: HistoryItem[] = defaultHistory;
   historyIndex: number = 0;
   lightMode: boolean = false;
   currentNode: string = ROOTNAME;

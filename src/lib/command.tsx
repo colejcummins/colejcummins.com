@@ -90,7 +90,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
 const renderWhoAmIContent = () => {
   return (
     <div className="flex flex-1 flex-col justify-center py-5">
-      <ActiveText>
+      <ActiveText link="https://github.com/colejcummins">
         <div className="flex items-center gap-5">
           <Image
             className="rounded-md"
