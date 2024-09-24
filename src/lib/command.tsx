@@ -5,7 +5,7 @@ import React from 'react';
 
 import ActiveText from '@/components/ActiveText';
 import { AppStore } from '@/store';
-import { getChildren, ROOTNAME, getParent, outputPwd, getPermissions, FsObject } from '@/lib/fs';
+import { getLsAChildren, getChildren, ROOTNAME, getParent, outputPwd, getPermissions, FsObject } from '@/lib/fs';
 
 interface Command {
   render?: (args: string[], location: string, store: AppStore) => React.JSX.Element;
@@ -27,17 +27,7 @@ export const commandMan: Record<string, string> = {
 };
 
 const renderLsContent = (args: string[], location: string, store: AppStore) => {
-  const children = getChildren(location);
-
-  const MaybeLink = ({ child, children }: { child: FsObject; children: React.ReactNode }) => {
-    return child.link || child.download ? (
-      <a href={child.link || child.download} rel="noreferrer" target="_blank" download={!!child.download}>
-        {children}
-      </a>
-    ) : (
-      children
-    );
-  };
+  const children = args.includes('-a') ? getLsAChildren(location) : getChildren(location);
 
   const handleOnClick = (child: FsObject) => {
     return !child.link && !child.download
@@ -48,7 +38,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
       : () => {};
   };
 
-  if (args[0] === '-l') {
+  if (args.includes('-l')) {
     return (
       <div className="flex flex-col gap-1">
         {children.map((child) => (
@@ -114,7 +104,7 @@ const renderEchoContent = (args: string[]) => {
 };
 
 const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode', 'cd', 'pwd', 'echo'];
-const validlsArgs = ['-l'];
+const validlsArgs = ['-a', '-l'];
 const validDirs = ['pyssect', 'minilang-compiler', 'asciizer', 'react-select'];
 export const commands: Record<string, Command> = {
   ls: {

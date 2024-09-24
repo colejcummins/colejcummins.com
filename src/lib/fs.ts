@@ -9,6 +9,7 @@ export interface FsObject {
 }
 
 export const ROOTNAME = 'colejcummins';
+export const DEFAULT_TARGETS = ['.', '..', 'colejcummins'];
 
 export const fs: Record<string, FsObject> = {
   colejcummins: {
@@ -171,10 +172,16 @@ export const getChildren = (cur: string): FsObject[] => {
   return fs[cur].children?.map((child) => fs[child]) ?? [];
 };
 
+export const getLsAChildren = (cur: string): FsObject[] => {
+  const renamedCur = {...fs[cur], name: '.'};
+  const renamedParent = {...fs[fs[cur].parent], name: '..'};
+
+  return [renamedCur, renamedParent, ...getChildren(cur)];
+}
+
 export const getValidCdTargets = (cur: string): string[] => {
-  const defaults = ['colejcummins', '..', '.'];
   return [
-    ...defaults,
+    ...DEFAULT_TARGETS,
     ...getChildren(cur)
       .filter((node) => node.children)
       .map((node) => node.name)
