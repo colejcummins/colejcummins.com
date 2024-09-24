@@ -58,11 +58,11 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
             link={child.link || child.download}
             download={!!child.download}
           >
-            <div className="flex gap-4" key={child.id}>
-              <div className="whitespace-nowrap">{getPermissions(child.id)}</div>
-              <div>colejcummins</div>
-              <div className="w-[20px]">{child.children?.length ?? 0}</div>
-              <div className="flex whitespace-nowrap w-[225px]">{child.tech || ''}</div>
+            <div className="flex gap-1 md:gap-4" key={child.id}>
+              <div className="whitespace-nowrap hidden md:flex">{getPermissions(child.id)}</div>
+              <div className="hidden lg:flex">colejcummins</div>
+              <div className="w-[20px] hidden lg:flex">{child.children?.length ?? 0}</div>
+              <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">{child.tech || ''}</div>
               <div>{child.name}</div>
             </div>
           </ActiveText>
@@ -96,8 +96,8 @@ const renderWhoAmIContent = () => {
             className="rounded-md"
             src="/profilepic.png"
             alt="Colejcummins Profile Picture"
-            width={70}
-            height={70}
+            width={56}
+            height={56}
           />
           <div className="flex flex-col">
             <div className="text-xl font-semibold">Cole Cummins</div>

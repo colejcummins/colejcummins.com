@@ -34,10 +34,10 @@ export const Console = observer(() => {
   }, [consoleHistory.length, scrollRef]);
 
   return (
-    <div className="flex flex-col h-[700px]">
+    <div className="flex flex-col h-full">
       <div className="flex flex-col overflow-hidden flex-1 justify-end">
         <div
-          className="flex flex-col overflow-y-scrol overflow-x-hidden"
+          className="flex flex-col overflow-y-scroll overflow-x-hidden"
           style={{ scrollbarColor: 'none' }}
           ref={scrollRef}
         >

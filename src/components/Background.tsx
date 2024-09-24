@@ -15,7 +15,7 @@ export const Background = observer(({ children }: { children: React.JSX.Element 
     []
   );
 
-  const gradientCol = lightMode ? '#fffffff9' : '#000000df';
+  const gradientCol = lightMode ? '#fffffff9' : '#000000cf';
 
   return (
     <div className="absolute w-screen h-screen bg-slate-800">
@@ -48,5 +48,17 @@ export const Background = () => {
         title="background"
         loading="lazy"
         src="https://meshbg-1xcve0hlq-chasedavis.vercel.app/embed/0.5627756749092943"
+      />
+ */
+
+/**
+ *       <div
+        className="absolute w-[200px] h-[200px]"
+        style={{
+          left: mousePos.x,
+          top: mousePos.y,
+          transform: 'translate(-50%, -50%)',
+          background: 'radial-gradient(circle closest-side, white, transparent)'
+        }}
       />
  */

@@ -2,36 +2,33 @@
 
 import React, { useRef, useState, useCallback } from 'react';
 import { throttle } from 'throttle-debounce';
+import { observer } from 'mobx-react-lite';
 
-export const Card = ({ children }: { children: React.JSX.Element }) => {
-  const [angle, setAngle] = useState(180);
+import { useAnimationStore } from '@/store';
+
+export const Card = observer(({ children }: { children: React.JSX.Element }) => {
+  const { mousePos } = useAnimationStore();
   const ref = useRef<HTMLDivElement>(null);
 
-  const handleMouseMove = useCallback(
-    throttle(50, (e: React.MouseEvent) => {
-      if (ref.current) {
-        const box = ref.current.getBoundingClientRect();
-        const middle = (box.left + box.right) / 2;
-        const x = e.clientX - middle;
-        const y = box.top + e.clientY;
-
-        setAngle(225 - (90 * Math.atan2(y, x)) / Math.PI);
-      }
-    }),
-    []
-  );
+  let angle = 225;
+  if (ref.current) {
+    const box = ref.current.getBoundingClientRect();
+    const middle = (box.left + box.right) / 2;
+    const x = mousePos.x - middle;
+    const y = box.top + mousePos.y;
+    angle = 225 - (90 * Math.atan2(y, x)) / Math.PI;
+  }
 
   return (
     <div
       ref={ref}
-      onMouseMove={handleMouseMove}
-      className="rounded-lg p-[1px] w-4/5 from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-10% dark:to-slate-900 to-70%"
+      className="rounded-lg md:p-[1px] w-full text-xs md:w-4/5 md:text-sm lg:text-base h-full md:h-[800px] from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-10% dark:to-slate-900 to-70%"
       style={{
         backgroundImage: `linear-gradient(${angle}deg, var(--tw-gradient-stops))`
       }}
     >
       <div
-        className="flex flex-col rounded-[calc(0.5rem-1px)] from-slate-50 to-white dark:from-slate-950 from-5% dark:to-black to-80%"
+        className="flex flex-col h-full rounded-[calc(0.5rem-1px)] from-slate-50 to-white dark:from-slate-950 from-5% dark:to-black to-80%"
         style={{
           backgroundImage: `linear-gradient(${angle}deg, var(--tw-gradient-stops))`
         }}
@@ -51,4 +48,4 @@ export const Card = ({ children }: { children: React.JSX.Element }) => {
       </div>
     </div>
   );
-};
+});
