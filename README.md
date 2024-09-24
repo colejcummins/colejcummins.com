@@ -10,4 +10,3 @@ colejcummins Personal Website
 - Add demo for python image
 - Improve contrast for light and dark colors
 - Improve man
-- Make responsive
