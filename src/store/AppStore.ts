@@ -8,8 +8,8 @@ export interface HistoryItem {
 }
 
 const defaultHistory: HistoryItem[] = [
-  {text: 'whoami', validation: '', location: 'colejcummins'},
-  {text: 'ls -l', validation: '', location: 'colejcummins'},
+  { text: 'whoami', validation: '', location: 'colejcummins' },
+  { text: 'ls -l', validation: '', location: 'colejcummins' }
 ];
 
 export class AppStore {
