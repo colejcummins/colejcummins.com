@@ -10,8 +10,8 @@ import { render } from '@/lib/command';
 const Command = observer(({ text, validation, location }: HistoryItem) => {
   const store = useAppStore();
   return (
-    <div className="py-5 px-5 font-mono text-slate-950 dark:text-slate-50 border-t border-slate-200 dark:border-slate-800">
-      <div className="py-1 flex gap-2 font-semibold text-slate-300 dark:text-slate-700">
+    <div className="py-6 px-6 font-mono text-slate-950 dark:text-slate-50 border-t border-slate-200 dark:border-slate-800">
+      <div className="flex pb-2 gap-2 font-semibold text-slate-300 dark:text-slate-700">
         {location} &gt;
         <div className="font-normal">{text}</div>
       </div>

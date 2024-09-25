@@ -1,4 +1,4 @@
-colejcummins Personal Website
+💻 My personal website
 
 ### TODO
 

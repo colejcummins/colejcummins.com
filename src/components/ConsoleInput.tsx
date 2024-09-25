@@ -2,16 +2,18 @@
 
 import React, { useState, KeyboardEvent, useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import { TypeAnimation } from 'react-type-animation';
 
-import { useAppStore } from '@/store';
+import { useAppStore, useAnimationStore } from '@/store';
 import { autocomplete, execute, validate } from '@/lib/command';
 import { getCur } from '@/lib/fs';
 
 const _ConsoleInput = observer(() => {
   const store = useAppStore();
+  const { inputFocused, setInputFocused } = useAnimationStore();
   const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex, currentNode } = store;
   const [inputValue, setInputValue] = useState('');
-  const [inputFocused, setInputFocused] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const animationRef = useRef<HTMLDivElement>(null);
 
@@ -19,7 +21,7 @@ const _ConsoleInput = observer(() => {
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+  }, [animationComplete]);
 
   useEffect(() => {
     inputRef.current?.setSelectionRange(inputValue.length, inputValue.length);
@@ -53,25 +55,51 @@ const _ConsoleInput = observer(() => {
   };
 
   return (
-    <div className="flex text-base gap-2 px-5 py-5 border-t border-slate-200 dark:border-slate-800">
+    <div className="flex text-base gap-2 px-6 py-6 border-t border-slate-200 dark:border-slate-800">
       <label className="font-mono font-semibold text-blue-700 dark:text-blue-400 shrink-0" htmlFor="terminal">
         {getCur(currentNode).name} &gt;
       </label>
       <div className="relative flex flex-1">
         <div className="absolute flex gap-2 font-mono whitespace-pre text-slate-400 dark:text-slate-600">{auto}</div>
-        <input
-          id="terminal"
-          type="text"
-          spellCheck="false"
-          autoCapitalize="off"
-          className="text-slate-950 dark:text-slate-50 z-10 flex-1 font-mono font-normal border-none outline-none bg-transparent caret-transparent"
-          ref={inputRef}
-          value={inputValue}
-          onChange={(evt) => setInputValue(evt.target.value)}
-          onKeyDown={handleKeyPress}
-          onFocus={() => setInputFocused(true)}
-          onBlur={() => setInputFocused(false)}
-        />
+        {animationComplete ? (
+          <input
+            id="terminal"
+            type="text"
+            spellCheck="false"
+            autoCapitalize="off"
+            className="text-slate-950 dark:text-slate-50 z-10 flex-1 font-mono font-normal border-none outline-none bg-transparent caret-transparent"
+            ref={inputRef}
+            value={inputValue}
+            onChange={(evt) => setInputValue(evt.target.value)}
+            onKeyDown={handleKeyPress}
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
+          />
+        ) : (
+          <div className="flex">
+            <TypeAnimation
+              className="font-mono text-base"
+              cursor={false}
+              sequence={[
+                1000,
+                'whoami',
+                600,
+                () => addHistory('whoami', '', 'colejcummins'),
+                '',
+                2000,
+                'ls -l',
+                700,
+                () => {
+                  addHistory('ls -l', '', 'colejcummins'), setAnimationComplete(true);
+                },
+                ''
+              ]}
+              speed={10}
+              omitDeletionAnimation={true}
+            />
+            <div className="h-6 w-1 bg-blue-700 dark:bg-blue-400 rounded-full animate-blink z-20" />
+          </div>
+        )}
         {inputFocused && (
           <div
             ref={animationRef}

@@ -62,7 +62,10 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   }
 
   return (
-    <div className="grid gap-y-1 gap-x-2 w-full" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+    <div
+      className="grid gap-y-1 gap-x-2 w-full"
+      style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
+    >
       {children.map((child) => (
         <ActiveText
           key={child.id}
@@ -79,7 +82,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
 
 const renderWhoAmIContent = () => {
   return (
-    <div className="flex flex-1 flex-col justify-center py-5">
+    <div className="flex flex-1 flex-col justify-center">
       <ActiveText link="https://github.com/colejcummins">
         <div className="flex items-center gap-5">
           <Image

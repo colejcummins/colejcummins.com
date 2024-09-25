@@ -10,7 +10,7 @@ export const Card = observer(({ children }: { children: React.JSX.Element }) => 
   const { mousePos } = useAnimationStore();
   const ref = useRef<HTMLDivElement>(null);
 
-  let angle = 225;
+  let angle = 180;
   if (ref.current) {
     const box = ref.current.getBoundingClientRect();
     const middle = (box.left + box.right) / 2;
@@ -22,7 +22,7 @@ export const Card = observer(({ children }: { children: React.JSX.Element }) => 
   return (
     <div
       ref={ref}
-      className="rounded-lg md:p-[1px] w-full text-xs md:w-4/5 md:text-sm lg:text-base h-full md:h-[800px] from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-10% dark:to-slate-900 to-70%"
+      className="rounded-lg md:p-[1px] w-full text-xs md:w-4/5 md:text-sm lg:text-base h-full md:h-[800px] from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-15% dark:to-slate-900 to-70%"
       style={{
         backgroundImage: `linear-gradient(${angle}deg, var(--tw-gradient-stops))`
       }}

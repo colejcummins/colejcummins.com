@@ -15,7 +15,7 @@ export const Background = observer(({ children }: { children: React.JSX.Element 
     []
   );
 
-  const gradientCol = lightMode ? '#fffffff9' : '#000000cf';
+  const gradientCol = lightMode ? '#fffffff9' : '#000000bf';
 
   return (
     <div className="absolute w-screen h-screen bg-slate-800">

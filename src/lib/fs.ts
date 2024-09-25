@@ -173,11 +173,11 @@ export const getChildren = (cur: string): FsObject[] => {
 };
 
 export const getLsAChildren = (cur: string): FsObject[] => {
-  const renamedCur = {...fs[cur], name: '.'};
-  const renamedParent = {...fs[fs[cur].parent], name: '..'};
+  const renamedCur = { ...fs[cur], name: '.' };
+  const renamedParent = { ...fs[fs[cur].parent], name: '..' };
 
   return [renamedCur, renamedParent, ...getChildren(cur)];
-}
+};
 
 export const getValidCdTargets = (cur: string): string[] => {
   return [
