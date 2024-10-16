@@ -16,7 +16,7 @@ export const Card = observer(({ children }: { children: React.JSX.Element }) => 
     const middle = (box.left + box.right) / 2;
     const x = mousePos.x - middle;
     const y = box.top + mousePos.y;
-    angle = 225 - (90 * Math.atan2(y, x)) / Math.PI;
+    angle = 225 - (135 * Math.atan2(y, x)) / Math.PI;
   }
 
   return (
