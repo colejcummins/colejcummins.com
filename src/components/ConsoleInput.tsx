@@ -13,7 +13,7 @@ const _ConsoleInput = observer(() => {
   const { inputFocused, setInputFocused } = useAnimationStore();
   const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex, currentNode } = store;
   const [inputValue, setInputValue] = useState('');
-  const [animationComplete, setAnimationComplete] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const animationRef = useRef<HTMLDivElement>(null);
 
@@ -55,7 +55,7 @@ const _ConsoleInput = observer(() => {
   };
 
   return (
-    <div className="flex text-base gap-2 px-6 py-6 border-t border-slate-200 dark:border-slate-800">
+    <div className="flex text-base gap-2 px-6 py-6 border-b border-slate-200 dark:border-slate-800">
       <label className="font-mono font-semibold text-blue-700 dark:text-blue-400 shrink-0" htmlFor="terminal">
         {getCur(currentNode).name} &gt;
       </label>
@@ -90,7 +90,8 @@ const _ConsoleInput = observer(() => {
                 'ls -l',
                 700,
                 () => {
-                  addHistory('ls -l', '', 'colejcummins'), setAnimationComplete(true);
+                  addHistory('ls -l', '', 'colejcummins');
+                  setAnimationComplete(true);
                 },
                 ''
               ]}

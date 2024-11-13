@@ -10,8 +10,8 @@ import { render } from '@/lib/command';
 const Command = observer(({ text, validation, location }: HistoryItem) => {
   const store = useAppStore();
   return (
-    <div className="py-6 px-6 font-mono text-slate-950 dark:text-slate-50 border-t border-slate-200 dark:border-slate-800">
-      <div className="flex pb-2 gap-2 font-semibold text-slate-300 dark:text-slate-700">
+    <div className="flex flex-col py-6 px-6 font-mono gap-2 text-slate-950 dark:text-slate-50 border-t border-slate-200 dark:border-slate-800">
+      <div className="flex gap-2 font-semibold text-slate-300 dark:text-slate-700">
         {location} &gt;
         <div className="font-normal">{text}</div>
       </div>
@@ -29,15 +29,24 @@ export const Console = observer(() => {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+      scrollRef.current.scroll({ top: -scrollRef.current.scrollHeight, left: 0 });
     }
   }, [consoleHistory.length, scrollRef]);
 
   return (
-    <div className="flex flex-col h-[calc(100%-41px)]">
-      <div className="flex flex-col overflow-hidden flex-1 justify-end overflow-y-hidden">
+    <div className="flex relative flex-col h-[calc(100%-41px)]">
+      <div>
+        <ConsoleInput />
+      </div>
+      <div
+        className="rounded-b-lg absolute shadow-white dark:shadow-black pointer-events-none w-full h-full"
+        style={{
+          boxShadow: 'inset 0 -160px 160px -120px var(--tw-shadow-color)'
+        }}
+      />
+      <div className="flex flex-col overflow-hidden flex-1 overflow-y-hidden">
         <div
-          className="flex flex-col overflow-y-scroll overflow-x-hidden"
+          className="flex flex-col-reverse overflow-y-scroll overflow-x-hidden"
           style={{ scrollbarColor: 'none' }}
           ref={scrollRef}
         >
@@ -45,9 +54,6 @@ export const Console = observer(() => {
             <Command {...item} key={i} />
           ))}
         </div>
-      </div>
-      <div className="justify-self-end">
-        <ConsoleInput />
       </div>
     </div>
   );

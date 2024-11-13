@@ -1,11 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { throttle } from 'throttle-debounce';
 import { observer } from 'mobx-react-lite';
 
 import { useAnimationStore, useAppStore } from '@/store';
 
 export const Background = observer(({ children }: { children: React.JSX.Element }) => {
-  const { mousePos, setMousePos } = useAnimationStore();
+  const { setMousePos } = useAnimationStore();
   const { lightMode } = useAppStore();
 
   const handleMouseMove = useCallback(
@@ -15,7 +15,7 @@ export const Background = observer(({ children }: { children: React.JSX.Element 
     []
   );
 
-  const gradientCol = lightMode ? '#fffffff9' : '#000000bf';
+  const gradientCol = lightMode ? '#f8fafcf5' : '#000000af';
 
   return (
     <div className="absolute w-screen h-screen bg-slate-800">

@@ -42,20 +42,17 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
     return (
       <div className="flex flex-col gap-1">
         {children.map((child) => (
-          <ActiveText
-            key={child.id}
-            onClick={handleOnClick(child)}
-            link={child.link || child.download}
-            download={!!child.download}
-          >
-            <div className="flex gap-1 md:gap-4" key={child.id}>
-              <div className="whitespace-nowrap hidden md:flex">{getPermissions(child.id)}</div>
-              <div className="hidden lg:flex">colejcummins</div>
-              <div className="w-[20px] hidden lg:flex">{child.children?.length ?? 0}</div>
-              <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">{child.tech || ''}</div>
-              <div>{child.name}</div>
-            </div>
-          </ActiveText>
+          <div key={child.id}>
+            <ActiveText onClick={handleOnClick(child)} link={child.link ?? child.download} download={!!child.download}>
+              <div className="flex gap-1 md:gap-4" key={child.id}>
+                <div className="whitespace-nowrap hidden md:flex">{getPermissions(child.id)}</div>
+                <div className="hidden lg:flex">colejcummins</div>
+                <div className="w-[20px] hidden lg:flex">{child.children?.length ?? 0}</div>
+                <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">{child.tech || ''}</div>
+                <div>{child.name}</div>
+              </div>
+            </ActiveText>
+          </div>
         ))}
       </div>
     );
@@ -70,7 +67,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
         <ActiveText
           key={child.id}
           onClick={handleOnClick(child)}
-          link={child.link || child.download}
+          link={child.link ?? child.download}
           download={!!child.download}
         >
           {child.name}
@@ -215,7 +212,7 @@ export const autocomplete = (input: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!args.length) {
-    return validCommands.sort((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) ?? '';
+    return validCommands.toSorted((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) ?? '';
   }
 
   if (command in commands && args.length) {

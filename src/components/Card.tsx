@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useCallback } from 'react';
-import { throttle } from 'throttle-debounce';
+import React, { useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { useAnimationStore } from '@/store';
@@ -22,13 +21,13 @@ export const Card = observer(({ children }: { children: React.JSX.Element }) => 
   return (
     <div
       ref={ref}
-      className="rounded-lg md:p-[1px] w-full text-xs md:w-4/5 md:text-sm lg:text-base h-full md:h-[800px] from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-15% dark:to-slate-900 to-70%"
+      className="rounded-lg md:p-[1px] w-full text-sm md:w-4/5 lg:text-base h-full md:h-[800px] from-slate-300 to-slate-200 dark:from-slate-400 from-5% dark:via-slate-600 via-20% dark:to-slate-900 to-70%"
       style={{
         backgroundImage: `linear-gradient(${angle}deg, var(--tw-gradient-stops))`
       }}
     >
       <div
-        className="flex flex-col h-full rounded-[calc(0.5rem-1px)] from-slate-50 to-white dark:from-slate-950 from-5% dark:to-black to-80%"
+        className="flex flex-col h-full rounded-[calc(0.5rem-1px)] from-white to-slate-50 dark:from-slate-950 from-1% dark:via-slate-950 via-10% dark:to-black to-80%"
         style={{
           backgroundImage: `linear-gradient(${angle}deg, var(--tw-gradient-stops))`
         }}
