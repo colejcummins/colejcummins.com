@@ -26,7 +26,6 @@ export class AppStore {
   }
 
   get validCdTargets(): string[] {
-    console.log(getValidCdTargets(this.currentNode));
     return getValidCdTargets(this.currentNode);
   }
 

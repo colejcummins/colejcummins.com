@@ -5,10 +5,10 @@ import React from 'react';
 
 import ActiveText from '@/components/ActiveText';
 import { AppStore } from '@/store';
-import { getLsAChildren, getChildren, ROOTNAME, getParent, outputPwd, getPermissions, FsObject } from '@/lib/fs';
+import { getLsAChildren, getChildren, ROOTNAME, getParent, outputPwd, getPermissions, FsObject, getValidCdTargets } from '@/lib/fs';
 
 interface Command {
-  render?: (args: string[], location: string, store: AppStore) => React.JSX.Element;
+  render?: (args: string[], location: string, store: AppStore) => React.JSX.Element | undefined;
   autocomplete?: (args: string[], store: AppStore) => string | undefined;
   validate?: (args: string[], store: AppStore) => string | undefined;
   execute?: (args: string[], store: AppStore) => void;
@@ -17,7 +17,6 @@ interface Command {
 export const commandMan: Record<string, string> = {
   man: 'Man',
   whoami: 'Displays effective user id. Usage:\nwhoami',
-  open: 'Opens a new tab navigating to a listed project',
   ls: 'Lists directory contents. Usage:\nls [ -l | -a ]',
   clear: 'Clears console and command history. Usage:\nclear',
   mode: 'Changes the current color mode. Usage:\nmode [ light | dark ]',
@@ -77,6 +76,21 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   );
 };
 
+const renderCdContent = (args: string[], location: string, store: AppStore) => {
+  let newLocation = '';
+  if (args.length === 0) {
+    newLocation = ROOTNAME;
+  } else if (args[0] === '..') {
+    newLocation = getParent(location).name;
+  } else if (args[0] === '.') {
+    newLocation = location
+  } else if (getValidCdTargets(location).includes(args[0])) {
+    newLocation = args[0];
+  }
+
+  return newLocation ? renderLsContent([], newLocation, store) : undefined;
+}
+
 const renderWhoAmIContent = () => {
   return (
     <div className="flex flex-1 flex-col justify-center">
@@ -84,6 +98,7 @@ const renderWhoAmIContent = () => {
         <div className="flex items-center gap-5">
           <Image
             className="rounded-md"
+            priority={true}
             src="/profilepic.png"
             alt="Colejcummins Profile Picture"
             width={56}
@@ -103,9 +118,8 @@ const renderEchoContent = (args: string[]) => {
   return <>{args.join(' ')}</>;
 };
 
-const validCommands = ['man', 'whoami', 'open', 'ls', 'clear', 'mode', 'cd', 'pwd', 'echo'];
+const validCommands = ['man', 'whoami', 'ls', 'clear', 'mode', 'cd', 'pwd', 'echo'];
 const validlsArgs = ['-a', '-l'];
-const validDirs = ['pyssect', 'minilang-compiler', 'asciizer', 'react-select'];
 export const commands: Record<string, Command> = {
   ls: {
     autocomplete: (args: string[]) => {
@@ -136,21 +150,8 @@ export const commands: Record<string, Command> = {
       return '';
     },
     render: (args: string[]) => {
-      return <pre className="font-mono text-slate-950 dark:text-slate-50">{commandMan[args[0]]}</pre>;
-    }
-  },
-  open: {
-    autocomplete: (args: string[]) => {
-      return validDirs.find((open) => open.startsWith(args[0]));
-    },
-    validate: (args: string[]) => {
-      if (args.length !== 1) {
-        return `open expects 1 argument. Valid arguments:\n${validDirs.join(' ')}`;
-      }
-      if (!validDirs.includes(args[0])) {
-        return `${args} is not a valid argument. Valid arguments:\n${validDirs.join(' ')}`;
-      }
-      return '';
+      const input = args.length > 0 ? args[0] : 'man';
+      return <pre className="font-mono text-slate-950 dark:text-slate-50">{commandMan[input]}</pre>;
     }
   },
   cd: {
@@ -163,6 +164,7 @@ export const commands: Record<string, Command> = {
       }
       return '';
     },
+    render: renderCdContent,
     execute: (args: string[], store: AppStore) => {
       if (args.length === 0) {
         store.goToNode(ROOTNAME);

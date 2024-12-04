@@ -49,8 +49,11 @@ const _ConsoleInput = observer(() => {
       changeIndex(-1);
       const { text } = historyIndex > 1 ? consoleHistory[consoleHistory.length - historyIndex + 1] : { text: '' };
       setInputValue(text);
-    } else if (evt.key === 'ArrowRight' && auto) {
-      setInputValue(auto);
+    } else if (evt.key === 'Tab') {
+      evt.preventDefault();
+      if (auto) {
+        setInputValue(auto);
+      }
     }
   };
 
@@ -72,7 +75,15 @@ const _ConsoleInput = observer(() => {
             value={inputValue}
             onChange={(evt) => setInputValue(evt.target.value)}
             onKeyDown={handleKeyPress}
-            onFocus={() => setInputFocused(true)}
+            onFocus={() => {
+              setInputFocused(true)
+              setTimeout(
+                () => {
+                  inputRef.current?.focus()
+                },
+                20,
+              )
+            }}
             onBlur={() => setInputFocused(false)}
           />
         ) : (

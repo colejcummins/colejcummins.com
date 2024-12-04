@@ -24,7 +24,7 @@ Command.displayName = 'Command';
 
 export const Console = observer(() => {
   const store = useAppStore();
-  const { consoleHistory } = store;
+  const { consoleHistory, validCdTargets } = store;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
