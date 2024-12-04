@@ -212,7 +212,7 @@ export const autocomplete = (input: string, store: AppStore) => {
   const [command, ...args] = input.split(' ').filter((str) => str !== '');
 
   if (!args.length) {
-    return validCommands.toSorted((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) ?? '';
+    return validCommands.sort((a, b) => a.localeCompare(b)).find((man) => man.startsWith(command)) ?? '';
   }
 
   if (command in commands && args.length) {
