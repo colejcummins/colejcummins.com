@@ -18,7 +18,12 @@ export const Background = observer(({ children }: { children: React.JSX.Element 
   const gradientCol = lightMode ? '#f8fafcf5' : '#000000af';
 
   return (
-    <div className="absolute w-screen h-screen bg-slate-800">
+    <div 
+      className="absolute w-screen h-screen"
+      style={{
+        backgroundImage: `radial-gradient(${lightMode ? '#2563eb' : '#e2e8f0'}, ${lightMode ? '#1e293b' : '#1e293b'} 75%)`
+      }}
+    >
       <div
         onMouseMove={handleMouseMove}
         className="absolute w-screen h-screen bg-[size:24px_24px] flex justify-center items-center"

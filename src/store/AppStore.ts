@@ -38,7 +38,7 @@ export class AppStore {
   }
 
   clearHistory() {
-    this.consoleHistory = this.consoleHistory.slice(-1);
+    this.consoleHistory = [];
   }
 
   addHistory(text: string, validation: string, location: string) {
