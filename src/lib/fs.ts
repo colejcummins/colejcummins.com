@@ -24,7 +24,6 @@ export const fs: Record<string, FsObject> = {
       'minilang-compiler',
       'learn-crypto',
       'image-to-ascii',
-      'react-search-modal'
     ]
   },
   'resume.pdf': {
@@ -103,13 +102,6 @@ export const fs: Record<string, FsObject> = {
     parent: 'llvm-syntax-highlighting',
     tech: 'Markdown',
     link: 'https://github.com/colejcummins/llvm-syntax-highlighting/blob/main/README.md'
-  },
-  'react-search-modal': {
-    id: 'react-search-modal',
-    name: 'react-search-modal',
-    tech: 'React / Elasticsearch',
-    parent: 'colejcummins',
-    children: []
   },
   'image-to-ascii': {
     id: 'image-to-ascii',

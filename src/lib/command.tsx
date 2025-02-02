@@ -96,14 +96,6 @@ const renderWhoAmIContent = () => {
     <div className="flex flex-1 flex-col justify-center">
       <ActiveText link="https://github.com/colejcummins">
         <div className="flex items-center gap-5">
-          <Image
-            className="rounded-md"
-            priority={true}
-            src="/profilepic.png"
-            alt="Colejcummins Profile Picture"
-            width={56}
-            height={56}
-          />
           <div className="flex flex-col">
             <div className="text-xl font-semibold">Cole Cummins</div>
             <div>React / Typescript / Nodejs / Nextjs / Python / ThreeJS</div>
