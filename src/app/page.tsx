@@ -2,67 +2,17 @@
 
 import React from 'react';
 
-import { Console } from '@/components/Console';
-import { Card } from '@/components/Card';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Background } from '@/components/Background';
+import { ConsoleInput } from '@/components/ConsoleInput';
+import { CommandHistory } from '@/components/commands/CommandHistory';
 
 export default function Home() {
   return (
     <ThemeProvider>
-      <div className="flex w-screen h-screen">
-        <Background>
-          <Card>
-            <Console />
-          </Card>
-        </Background>
+      <div className="flex flex-col w-screen h-screen bg-background">
+        <CommandHistory />
+        <ConsoleInput />
       </div>
     </ThemeProvider>
   );
 }
-
-/**
- *
-export default function Home() {
-  return (
-    <ThemeProvider>
-      <div className="relative flex justify-center items-center w-screen h-screen bg-white dark:bg-black">
-        <Background />
-        <div className="flex flex-col rounded-lg w-4/5 bg-slate-100/50 dark:bg-slate-900/75 border  backdrop-blur-lg z-10">
-          <div className="flex gap-2 justify-start p-2 border-b border-slate-300 dark:border-slate-700">
-            {Array(3)
-              .fill(0)
-              .map((i) => (
-                <div key={i} className="rounded-full h-4 w-4 border border-slate-300 dark:border-slate-700" />
-              ))}
-          </div>
-          <Console />
-        </div>
-      </div>
-    </ThemeProvider>
-  );
-}
- */
-
-/**
- * export default function Home() {
-  return (
-    <ThemeProvider>
-      <div className="flex justify-center items-center w-screen h-screen bg-white dark:bg-black">
-        <div className="rounded-lg p-px w-4/5 bg-gradient-to-b from-slate-300 to-slate-200 dark:from-slate-700 dark:to-slate-900">
-          <div className="flex flex-col rounded-[calc(0.5rem-1px)] bg-gradient-to-br from-slate-100 dark:from-slate-900 to-slate-50 dark:to-slate-950">
-            <div className="flex gap-2 justify-start p-2 border-b border-slate-200 dark:border-slate-800">
-              {Array(3)
-                .fill(0)
-                .map((i) => (
-                  <div key={i} className="rounded-full h-4 w-4 border border-slate-200 dark:border-slate-800" />
-                ))}
-            </div>
-            <Console />
-          </div>
-        </div>
-      </div>
-    </ThemeProvider>
-  );
-}
- */

@@ -5,7 +5,16 @@ import React from 'react';
 
 import ActiveText from '@/components/ActiveText';
 import { AppStore } from '@/store';
-import { getLsAChildren, getChildren, ROOTNAME, getParent, outputPwd, getPermissions, FsObject, getValidCdTargets } from '@/lib/fs';
+import {
+  getLsAChildren,
+  getChildren,
+  ROOTNAME,
+  getParent,
+  outputPwd,
+  getPermissions,
+  FsObject,
+  getValidCdTargets
+} from '@/lib/fs';
 
 interface Command {
   render?: (args: string[], location: string, store: AppStore) => React.JSX.Element | undefined;
@@ -83,13 +92,13 @@ const renderCdContent = (args: string[], location: string, store: AppStore) => {
   } else if (args[0] === '..') {
     newLocation = getParent(location).name;
   } else if (args[0] === '.') {
-    newLocation = location
+    newLocation = location;
   } else if (getValidCdTargets(location).includes(args[0])) {
     newLocation = args[0];
   }
 
   return newLocation ? renderLsContent([], newLocation, store) : undefined;
-}
+};
 
 const renderWhoAmIContent = () => {
   return (
@@ -143,7 +152,7 @@ export const commands: Record<string, Command> = {
     },
     render: (args: string[]) => {
       const input = args.length > 0 ? args[0] : 'man';
-      return <pre className="font-mono text-slate-950 dark:text-slate-50">{commandMan[input]}</pre>;
+      return <pre className="font-mono text-foreground">{commandMan[input]}</pre>;
     }
   },
   cd: {

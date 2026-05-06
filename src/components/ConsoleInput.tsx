@@ -56,18 +56,18 @@ export const ConsoleInput = () => {
   };
 
   return (
-    <div className="flex text-base gap-2 px-6 py-6 border-b border-slate-200 dark:border-slate-800">
-      <label className="font-mono font-semibold text-blue-800 dark:text-blue-300 shrink-0" htmlFor="terminal">
+    <div className="flex text-base gap-2 px-6 py-4 border-t border-border">
+      <label className="font-mono font-semibold text-accent shrink-0" htmlFor="terminal">
         {getCur(currentNode).name} &gt;
       </label>
       <div className="relative flex flex-1">
-        <div className="absolute flex gap-2 font-mono whitespace-pre text-slate-400 dark:text-slate-600">{auto}</div>
+        <div className="absolute flex gap-2 font-mono whitespace-pre text-foreground-subtle">{auto}</div>
         <input
           id="terminal"
           type="text"
           spellCheck="false"
           autoCapitalize="off"
-          className="text-slate-950 dark:text-slate-50 z-10 flex-1 font-mono font-normal border-none outline-none bg-transparent caret-transparent"
+          className="text-foreground z-10 flex-1 font-mono font-normal border-none outline-none bg-transparent caret-transparent"
           ref={inputRef}
           value={inputValue}
           onChange={(evt) => setInputValue(evt.target.value)}
@@ -83,7 +83,7 @@ export const ConsoleInput = () => {
         {inputFocused && (
           <div
             ref={animationRef}
-            className="absolute h-6 w-1 bg-blue-800 dark:bg-blue-300 rounded-full animate-blink z-20"
+            className="absolute h-6 w-1 bg-accent rounded-full animate-blink z-20"
             style={{
               left: Math.min(inputValue.length * 9.632, inputRef?.current?.offsetWidth ?? 2000)
             }}
