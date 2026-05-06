@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getValidCdTargets, ROOTNAME } from '@/lib/fs';
+import { fs, ROOT_NAME } from '@/lib/filesystem';
 
 export interface HistoryItem {
   text: string;
@@ -21,17 +21,17 @@ export interface AppStore {
   goToNode: (nodeName: string) => void;
 }
 
-export const useAppStore = create<AppStore>((set, get) => ({
+export const useAppStore = create<AppStore>((set) => ({
   consoleHistory: [],
   historyIndex: 0,
   lightMode: false,
-  currentNode: ROOTNAME,
-  validCdTargets: getValidCdTargets(ROOTNAME),
+  currentNode: ROOT_NAME,
+  validCdTargets: fs.getValidCdTargets(ROOT_NAME),
   clearIndex: () => set({ historyIndex: 0 }),
   clearHistory: () => set({ consoleHistory: [] }),
   addHistory: (text, validation, location) =>
     set((state) => ({ consoleHistory: [...state.consoleHistory, { text, validation, location }] })),
   changeIndex: (num) => set((state) => ({ historyIndex: state.historyIndex + num })),
   setLightMode: (lightMode) => set({ lightMode }),
-  goToNode: (nodeName) => set({ currentNode: nodeName, validCdTargets: getValidCdTargets(nodeName) })
+  goToNode: (nodeName) => set({ currentNode: nodeName, validCdTargets: fs.getValidCdTargets(nodeName) })
 }));

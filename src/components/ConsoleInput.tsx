@@ -4,7 +4,7 @@ import React, { useState, KeyboardEvent, useRef, useEffect } from 'react';
 
 import { useAppStore, useAnimationStore } from '@/store';
 import { autocomplete, execute, validate } from '@/lib/command';
-import { getCur } from '@/lib/fs';
+import { fs } from '@/lib/filesystem';
 
 export const ConsoleInput = () => {
   const store = useAppStore();
@@ -33,7 +33,8 @@ export const ConsoleInput = () => {
 
     if (evt.key === 'Enter' && inputValue !== '') {
       const validation = validate(inputValue, store) || '';
-      addHistory(inputValue, validation, getCur(currentNode).name);
+      const node = fs.getNode(currentNode);
+      addHistory(inputValue, validation, node?.label ?? currentNode);
       if (!validation) {
         execute(inputValue, store);
       }
@@ -55,10 +56,12 @@ export const ConsoleInput = () => {
     }
   };
 
+  const currentLabel = fs.getNode(currentNode)?.label ?? currentNode;
+
   return (
     <div className="flex text-base gap-2 px-6 py-4 border-t border-border">
       <label className="font-mono font-semibold text-accent shrink-0" htmlFor="terminal">
-        {getCur(currentNode).name} &gt;
+        {currentLabel} &gt;
       </label>
       <div className="relative flex flex-1">
         <div className="absolute flex gap-2 font-mono whitespace-pre text-foreground-subtle">{auto}</div>

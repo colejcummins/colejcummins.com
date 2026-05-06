@@ -1,20 +1,10 @@
 'use client';
 
-import Image from 'next/image';
 import React from 'react';
 
 import ActiveText from '@/components/ActiveText';
 import { AppStore } from '@/store';
-import {
-  getLsAChildren,
-  getChildren,
-  ROOTNAME,
-  getParent,
-  outputPwd,
-  getPermissions,
-  FsObject,
-  getValidCdTargets
-} from '@/lib/fs';
+import { fs, ROOT_NAME, FsNode } from '@/lib/filesystem';
 
 interface Command {
   render?: (args: string[], location: string, store: AppStore) => React.JSX.Element | undefined;
@@ -35,12 +25,12 @@ export const commandMan: Record<string, string> = {
 };
 
 const renderLsContent = (args: string[], location: string, store: AppStore) => {
-  const children = args.includes('-a') ? getLsAChildren(location) : getChildren(location);
+  const children = args.includes('-a') ? fs.listWithDots(location) : fs.listAll(location);
 
-  const handleOnClick = (child: FsObject) => {
+  const handleOnClick = (child: FsNode) => {
     return !child.link && !child.download
       ? () => {
-          store.addHistory(`cd ${child.name}`, '', location);
+          store.addHistory(`cd ${child.label}`, '', location);
           store.goToNode(child.id);
         }
       : () => {};
@@ -53,11 +43,13 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
           <div key={child.id}>
             <ActiveText onClick={handleOnClick(child)} link={child.link ?? child.download} download={!!child.download}>
               <div className="flex gap-1 md:gap-4" key={child.id}>
-                <div className="whitespace-nowrap hidden md:flex">{getPermissions(child.id)}</div>
+                <div className="whitespace-nowrap hidden md:flex">{fs.getPermissions(child.id)}</div>
                 <div className="hidden lg:flex">colejcummins</div>
-                <div className="w-[20px] hidden lg:flex">{child.children?.length ?? 0}</div>
-                <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">{child.tech || ''}</div>
-                <div>{child.name}</div>
+                <div className="w-[20px] hidden lg:flex">{fs.getChildren(child.id).length}</div>
+                <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">
+                  {child.metadata?.tech || ''}
+                </div>
+                <div>{child.label}</div>
               </div>
             </ActiveText>
           </div>
@@ -78,7 +70,7 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
           link={child.link ?? child.download}
           download={!!child.download}
         >
-          {child.name}
+          {child.label}
         </ActiveText>
       ))}
     </div>
@@ -88,12 +80,12 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
 const renderCdContent = (args: string[], location: string, store: AppStore) => {
   let newLocation = '';
   if (args.length === 0) {
-    newLocation = ROOTNAME;
+    newLocation = ROOT_NAME;
   } else if (args[0] === '..') {
-    newLocation = getParent(location).name;
+    newLocation = fs.getParent(location)?.id ?? ROOT_NAME;
   } else if (args[0] === '.') {
     newLocation = location;
-  } else if (getValidCdTargets(location).includes(args[0])) {
+  } else if (fs.getValidCdTargets(location).includes(args[0])) {
     newLocation = args[0];
   }
 
@@ -168,9 +160,9 @@ export const commands: Record<string, Command> = {
     render: renderCdContent,
     execute: (args: string[], store: AppStore) => {
       if (args.length === 0) {
-        store.goToNode(ROOTNAME);
+        store.goToNode(ROOT_NAME);
       } else if (args[0] === '..') {
-        store.goToNode(getParent(store.currentNode).name);
+        store.goToNode(fs.getParent(store.currentNode)?.id ?? ROOT_NAME);
       } else if (args[0] === '.') {
         return;
       } else {
@@ -200,7 +192,7 @@ export const commands: Record<string, Command> = {
   },
   pwd: {
     render: (_, location: string) => {
-      return <>{outputPwd(location)}</>;
+      return <>{fs.getPath(location)}</>;
     }
   },
   echo: {
