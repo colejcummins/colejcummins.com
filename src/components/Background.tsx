@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
 import { throttle } from 'throttle-debounce';
-import { observer } from 'mobx-react-lite';
 
 import { useAnimationStore, useAppStore } from '@/store';
 
-export const Background = observer(({ children }: { children: React.JSX.Element }) => {
-  const { setMousePos } = useAnimationStore();
-  const { lightMode } = useAppStore();
+export const Background = ({ children }: { children: React.JSX.Element }) => {
+  const setMousePos = useAnimationStore((s) => s.setMousePos);
+  const lightMode = useAppStore((s) => s.lightMode);
 
   const handleMouseMove = useCallback(
     throttle(50, (e: React.MouseEvent) => {
@@ -18,7 +17,7 @@ export const Background = observer(({ children }: { children: React.JSX.Element 
   const gradientCol = lightMode ? '#f8fafcf5' : '#000000af';
 
   return (
-    <div 
+    <div
       className="absolute w-screen h-screen"
       style={{
         backgroundImage: `radial-gradient(${lightMode ? '#2563eb' : '#e2e8f0'}, ${lightMode ? '#1e293b' : '#1e293b'} 75%)`
@@ -36,34 +35,4 @@ export const Background = observer(({ children }: { children: React.JSX.Element 
       </div>
     </div>
   );
-});
-
-/**
-export const Background = () => {
-  return (
-      <div className="absolute w-full h-full bg-slate-200/50 dark:bg-slate-900/50 backdrop-blur-md" />
-
-    </div>
-  );
 };
-*/
-
-/**
- * <iframe
-        title="background"
-        loading="lazy"
-        src="https://meshbg-1xcve0hlq-chasedavis.vercel.app/embed/0.5627756749092943"
-      />
- */
-
-/**
- *       <div
-        className="absolute w-[200px] h-[200px]"
-        style={{
-          left: mousePos.x,
-          top: mousePos.y,
-          transform: 'translate(-50%, -50%)',
-          background: 'radial-gradient(circle closest-side, white, transparent)'
-        }}
-      />
- */

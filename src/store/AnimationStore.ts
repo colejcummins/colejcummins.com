@@ -1,21 +1,15 @@
-import { makeAutoObservable, action } from 'mobx';
+import { create } from 'zustand';
 
-export class AnimationStore {
-  inputFocused: boolean = false;
-  mousePos: { x: number; y: number } = { x: 0, y: 0 };
-
-  constructor() {
-    makeAutoObservable(this, {
-      setInputFocused: action.bound,
-      setMousePos: action.bound
-    });
-  }
-
-  setMousePos(pos: { x: number; y: number }) {
-    this.mousePos = pos;
-  }
-
-  setInputFocused(inputFocused: boolean) {
-    this.inputFocused = inputFocused;
-  }
+export interface AnimationStore {
+  inputFocused: boolean;
+  mousePos: { x: number; y: number };
+  setInputFocused: (inputFocused: boolean) => void;
+  setMousePos: (pos: { x: number; y: number }) => void;
 }
+
+export const useAnimationStore = create<AnimationStore>((set) => ({
+  inputFocused: false,
+  mousePos: { x: 0, y: 0 },
+  setInputFocused: (inputFocused) => set({ inputFocused }),
+  setMousePos: (mousePos) => set({ mousePos })
+}));

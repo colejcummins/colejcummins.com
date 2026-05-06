@@ -1,4 +1,4 @@
-import { makeAutoObservable, action, computed } from 'mobx';
+import { create } from 'zustand';
 import { getValidCdTargets, ROOTNAME } from '@/lib/fs';
 
 export interface HistoryItem {
@@ -7,49 +7,31 @@ export interface HistoryItem {
   location: string;
 }
 
-export class AppStore {
-  consoleHistory: HistoryItem[] = [];
-  historyIndex: number = 0;
-  lightMode: boolean = false;
-  currentNode: string = ROOTNAME;
-
-  constructor() {
-    makeAutoObservable(this, {
-      validCdTargets: computed,
-      clearIndex: action.bound,
-      clearHistory: action.bound,
-      addHistory: action.bound,
-      changeIndex: action.bound,
-      setLightMode: action.bound,
-      goToNode: action.bound
-    });
-  }
-
-  get validCdTargets(): string[] {
-    return getValidCdTargets(this.currentNode);
-  }
-
-  goToNode(nodeName: string) {
-    this.currentNode = nodeName;
-  }
-
-  clearIndex() {
-    this.historyIndex = 0;
-  }
-
-  clearHistory() {
-    this.consoleHistory = [];
-  }
-
-  addHistory(text: string, validation: string, location: string) {
-    this.consoleHistory.push({ text, validation, location });
-  }
-
-  changeIndex(num: number) {
-    this.historyIndex += num;
-  }
-
-  setLightMode(lightMode: boolean) {
-    this.lightMode = lightMode;
-  }
+export interface AppStore {
+  consoleHistory: HistoryItem[];
+  historyIndex: number;
+  lightMode: boolean;
+  currentNode: string;
+  validCdTargets: string[];
+  clearIndex: () => void;
+  clearHistory: () => void;
+  addHistory: (text: string, validation: string, location: string) => void;
+  changeIndex: (num: number) => void;
+  setLightMode: (lightMode: boolean) => void;
+  goToNode: (nodeName: string) => void;
 }
+
+export const useAppStore = create<AppStore>((set, get) => ({
+  consoleHistory: [],
+  historyIndex: 0,
+  lightMode: false,
+  currentNode: ROOTNAME,
+  validCdTargets: getValidCdTargets(ROOTNAME),
+  clearIndex: () => set({ historyIndex: 0 }),
+  clearHistory: () => set({ consoleHistory: [] }),
+  addHistory: (text, validation, location) =>
+    set((state) => ({ consoleHistory: [...state.consoleHistory, { text, validation, location }] })),
+  changeIndex: (num) => set((state) => ({ historyIndex: state.historyIndex + num })),
+  setLightMode: (lightMode) => set({ lightMode }),
+  goToNode: (nodeName) => set({ currentNode: nodeName, validCdTargets: getValidCdTargets(nodeName) })
+}));

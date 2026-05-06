@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, KeyboardEvent, useRef, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
 
 import { useAppStore, useAnimationStore } from '@/store';
 import { autocomplete, execute, validate } from '@/lib/command';
 import { getCur } from '@/lib/fs';
 
-const _ConsoleInput = observer(() => {
+export const ConsoleInput = () => {
   const store = useAppStore();
-  const { inputFocused, setInputFocused } = useAnimationStore();
+  const inputFocused = useAnimationStore((s) => s.inputFocused);
+  const setInputFocused = useAnimationStore((s) => s.setInputFocused);
   const { consoleHistory, addHistory, historyIndex, changeIndex, clearIndex, currentNode } = store;
   const [inputValue, setInputValue] = useState('');
   const [animationComplete, setAnimationComplete] = useState(true);
@@ -27,7 +27,6 @@ const _ConsoleInput = observer(() => {
   }, [historyIndex, inputValue]);
 
   const handleKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
-    // For removing the blinking animation while we are typing
     animationRef?.current?.classList.remove('animate-blink');
     void animationRef?.current?.offsetWidth;
     animationRef?.current?.classList.add('animate-blink');
@@ -75,12 +74,9 @@ const _ConsoleInput = observer(() => {
           onKeyDown={handleKeyPress}
           onFocus={() => {
             setInputFocused(true);
-            setTimeout(
-              () => {
-                inputRef.current?.focus()
-              },
-              20,
-            )
+            setTimeout(() => {
+              inputRef.current?.focus();
+            }, 20);
           }}
           onBlur={() => setInputFocused(false)}
         />
@@ -96,7 +92,4 @@ const _ConsoleInput = observer(() => {
       </div>
     </div>
   );
-});
-
-_ConsoleInput.displayName = 'ConsoleInput';
-export { _ConsoleInput as ConsoleInput };
+};

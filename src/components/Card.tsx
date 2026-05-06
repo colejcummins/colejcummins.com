@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { observer } from 'mobx-react-lite';
 
 import { useAnimationStore } from '@/store';
 
-export const Card = observer(({ children }: { children: React.JSX.Element }) => {
-  const { mousePos } = useAnimationStore();
+export const Card = ({ children }: { children: React.JSX.Element }) => {
+  const mousePos = useAnimationStore((s) => s.mousePos);
   const ref = useRef<HTMLDivElement>(null);
 
   let angle = 180;
@@ -47,4 +46,4 @@ export const Card = observer(({ children }: { children: React.JSX.Element }) => 
       </div>
     </div>
   );
-});
+};
