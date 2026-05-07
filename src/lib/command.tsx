@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import ActiveText from '@/components/ActiveText';
+import ActiveText from '@/components/active-text';
 import { AppStore } from '@/store';
 import { fs, ROOT_NAME, FsNode } from '@/lib/filesystem';
 

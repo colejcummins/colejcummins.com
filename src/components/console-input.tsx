@@ -59,7 +59,7 @@ export const ConsoleInput = () => {
   const currentLabel = fs.getNode(currentNode)?.label ?? currentNode;
 
   return (
-    <div className="flex text-base gap-2 px-6 py-4 border-t border-border">
+    <div className="flex text-xl gap-2 px-6 py-6">
       <label className="font-mono font-semibold text-accent shrink-0" htmlFor="terminal">
         {currentLabel} &gt;
       </label>
@@ -86,7 +86,7 @@ export const ConsoleInput = () => {
         {inputFocused && (
           <div
             ref={animationRef}
-            className="absolute h-6 w-1 bg-accent rounded-full animate-blink z-20"
+            className="absolute h-7 w-2 bg-accent animate-blink z-20"
             style={{
               left: Math.min(inputValue.length * 9.632, inputRef?.current?.offsetWidth ?? 2000)
             }}

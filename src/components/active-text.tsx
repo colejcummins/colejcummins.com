@@ -9,7 +9,7 @@ interface ActiveTextProps {
 }
 
 const ActiveText: React.FC<ActiveTextProps> = ({ onClick, children, className, link, download }) => {
-  const joinedClassName = `${className} justify-self-start focus:ring-2 ring-offset-3 ring-accent text-foreground hover:text-accent-hover outline-none rounded-sm`;
+  const joinedClassName = `${className} justify-self-start focus:ring-2 ring-offset-3 ring-accent text-foreground hover:underline outline-none rounded-sm`;
 
   return link || download ? (
     <a className={joinedClassName} href={link} rel="noreferrer" target="_blank" download={download}>

@@ -8,10 +8,10 @@ import { render } from '@/lib/command';
 const CommandEntry = ({ text, validation, location }: HistoryItem) => {
   const store = useAppStore();
   return (
-    <div className="flex flex-col px-6 py-2 font-mono gap-1 text-foreground">
+    <div className="flex flex-col px-6 py-2 font-mono gap-1 text-foreground-subtle">
       <div className="flex gap-2 font-semibold text-foreground-muted">
         {location} &gt;
-        <span className="font-normal text-foreground">{text}</span>
+        <span className="font-normal">{text}</span>
       </div>
       {!validation && render(text, location, store)}
       {validation && <div className="text-validation font-mono">{validation}</div>}
@@ -30,7 +30,7 @@ export const CommandHistory = () => {
   }, [consoleHistory.length]);
 
   return (
-    <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col justify-end py-4">
+    <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col justify-end py-4 text-xl">
       {consoleHistory.map((item, i) => (
         <CommandEntry {...item} key={i} />
       ))}

@@ -2,9 +2,9 @@
 
 import React from 'react';
 
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { ConsoleInput } from '@/components/ConsoleInput';
-import { CommandHistory } from '@/components/commands/CommandHistory';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ConsoleInput } from '@/components/console-input';
+import { CommandHistory } from '@/components/commands/command-history';
 
 export default function Home() {
   return (
