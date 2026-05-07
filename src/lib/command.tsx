@@ -2,7 +2,8 @@
 
 import React from 'react';
 
-import ActiveText from '@/components/active-text';
+import { TextLink } from '@/components/ui/text-link';
+import { TextButton } from '@/components/ui/text-button';
 import { AppStore } from '@/store';
 import { fs, ROOT_NAME, FsNode } from '@/lib/filesystem';
 
@@ -39,21 +40,30 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
   if (args.includes('-l')) {
     return (
       <div className="flex flex-col gap-1">
-        {children.map((child) => (
-          <div key={child.id}>
-            <ActiveText onClick={handleOnClick(child)} link={child.link ?? child.download} download={!!child.download}>
-              <div className="flex gap-1 md:gap-4" key={child.id}>
-                <div className="whitespace-nowrap hidden md:flex">{fs.getPermissions(child.id)}</div>
-                <div className="hidden lg:flex">colejcummins</div>
-                <div className="w-[20px] hidden lg:flex">{fs.getChildren(child.id).length}</div>
-                <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">
-                  {child.metadata?.tech || ''}
-                </div>
-                <div>{child.label}</div>
+        {children.map((child) => {
+          const content = (
+            <div className="flex gap-1 md:gap-4">
+              <div className="whitespace-nowrap hidden md:flex">{fs.getPermissions(child.id)}</div>
+              <div className="hidden lg:flex">colejcummins</div>
+              <div className="w-[20px] hidden lg:flex">{fs.getChildren(child.id).length}</div>
+              <div className="flex whitespace-nowrap w-[170px] md:w-[200px] lg:w-[220px]">
+                {child.metadata?.tech || ''}
               </div>
-            </ActiveText>
-          </div>
-        ))}
+              <div>{child.label}</div>
+            </div>
+          );
+          return (
+            <div key={child.id}>
+              {child.link || child.download ? (
+                <TextLink href={child.link ?? child.download!} download={!!child.download}>
+                  {content}
+                </TextLink>
+              ) : (
+                <TextButton onClick={handleOnClick(child)}>{content}</TextButton>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -63,16 +73,17 @@ const renderLsContent = (args: string[], location: string, store: AppStore) => {
       className="grid gap-y-1 gap-x-2 w-full"
       style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
     >
-      {children.map((child) => (
-        <ActiveText
-          key={child.id}
-          onClick={handleOnClick(child)}
-          link={child.link ?? child.download}
-          download={!!child.download}
-        >
-          {child.label}
-        </ActiveText>
-      ))}
+      {children.map((child) =>
+        child.link || child.download ? (
+          <TextLink key={child.id} href={child.link ?? child.download!} download={!!child.download}>
+            {child.label}
+          </TextLink>
+        ) : (
+          <TextButton key={child.id} onClick={handleOnClick(child)}>
+            {child.label}
+          </TextButton>
+        )
+      )}
     </div>
   );
 };
@@ -95,14 +106,14 @@ const renderCdContent = (args: string[], location: string, store: AppStore) => {
 const renderWhoAmIContent = () => {
   return (
     <div className="flex flex-1 flex-col justify-center">
-      <ActiveText link="https://github.com/colejcummins">
+      <TextLink href="https://github.com/colejcummins">
         <div className="flex items-center gap-5">
           <div className="flex flex-col">
             <div className="text-xl font-semibold">Cole Cummins</div>
             <div>React / Typescript / Nodejs / Nextjs / Python / ThreeJS</div>
           </div>
         </div>
-      </ActiveText>
+      </TextLink>
     </div>
   );
 };
